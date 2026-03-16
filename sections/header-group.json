@@ -11,34 +11,37 @@
   "type": "header",
   "name": "Header",
   "sections": {
-    "header_announcements_9jGBFp": {
-      "type": "header-announcements",
+    "new_annc_3VHD9B": {
+      "type": "NewAnnc",
       "blocks": {
-        "announcement_BxgCk9": {
-          "type": "_announcement",
+        "announcement_BPPhNm": {
+          "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
-            "link": "",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
+            "text": "Free Shippin On All Orders",
+            "link": ""
+          }
+        },
+        "announcement_wizEWe": {
+          "type": "announcement",
+          "settings": {
+            "text": "New Collection is Live!",
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "announcement_BxgCk9"
+        "announcement_BPPhNm",
+        "announcement_wizEWe"
       ],
-      "name": "t:names.announcement_bar",
+      "name": "Vertical Announcement Bar",
       "settings": {
-        "speed": 5,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "divider_width": 1,
-        "padding-block-start": 15,
-        "padding-block-end": 15
+        "bg_color": "#000000",
+        "text_color": "#ffffff",
+        "font_size": 14,
+        "font_weight": "500",
+        "padding_vertical": 10,
+        "padding_horizontal": 15,
+        "speed": 4
       }
     },
     "header_section": {
@@ -83,6 +86,7 @@
         "logo_position": "left",
         "menu_position": "left",
         "menu_row": "top",
+        "customer_account_menu": "customer-account-main-menu",
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
@@ -99,6 +103,10 @@
         "divider_width": 0,
         "divider_size": "page-width",
         "border_width": 0,
+        "actions_display_style": "icon",
+        "actions_font_size": "0.875rem",
+        "actions_font": "body",
+        "actions_text_case": "none",
         "color_scheme_top": "scheme-1",
         "color_scheme_bottom": "",
         "color_scheme_transparent": "scheme-6",
@@ -112,7 +120,7 @@
     }
   },
   "order": [
-    "header_announcements_9jGBFp",
+    "new_annc_3VHD9B",
     "header_section"
   ]
 }
