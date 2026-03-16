@@ -1,0 +1,355 @@
+{% comment %}
+  Organic Farming & Agriculture Hero Section
+  Shopify Liquid Template — drop into sections/organic-farming-hero.liquid
+{% endcomment %}
+
+<section class="agri-hero" id="agri-hero-{{ section.id }}">
+  <div class="agri-hero__bg-overlay"></div>
+
+  {% if section.settings.bg_image != blank %}
+    <div class="agri-hero__bg-image">
+      {{
+        section.settings.bg_image
+        | image_url: width: 1920
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'agri-hero__bg-img',
+          alt: section.settings.bg_image.alt
+      }}
+    </div>
+  {% else %}
+    <div class="agri-hero__bg-image agri-hero__bg-image--placeholder">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'agri-hero__bg-img agri-hero__bg-img--svg' }}
+    </div>
+  {% endif %}
+
+  <div class="agri-hero__content">
+
+    {% if section.settings.badge_text != blank %}
+      <div class="agri-hero__badge" data-animate="fade-up" style="--delay:0s">
+        <span>{{ section.settings.badge_text }}</span>
+      </div>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h1 class="agri-hero__heading" data-animate="fade-up" style="--delay:0.15s">
+        {{ section.settings.heading }}
+      </h1>
+    {% endif %}
+
+    {% if section.settings.subtext != blank %}
+      <p class="agri-hero__subtext" data-animate="fade-up" style="--delay:0.3s">
+        {{ section.settings.subtext }}
+      </p>
+    {% endif %}
+
+    <div class="agri-hero__ctas" data-animate="fade-up" style="--delay:0.45s">
+      {% if section.settings.btn_primary_label != blank %}
+        <a href="{{ section.settings.btn_primary_url }}" class="agri-hero__btn agri-hero__btn--primary">
+          <span>{{ section.settings.btn_primary_label }}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8l4 4-4 4M8 12h8"/>
+          </svg>
+        </a>
+      {% endif %}
+
+      {% if section.settings.btn_secondary_label != blank %}
+        <a href="{{ section.settings.btn_secondary_url }}" class="agri-hero__btn agri-hero__btn--secondary">
+          <span>{{ section.settings.btn_secondary_label }}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8l4 4-4 4M8 12h8"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #agri-hero-{{ section.id }} {
+    --green-dark:   #0d1f0e;
+    --green-mid:    #1a4d1e;
+    --green-hover:  #255c2a;
+    --gold:         #c9a227;
+    --gold-hover:   rgba(201,162,39,0.12);
+    --white:        #ffffff;
+    --white-muted:  rgba(255,255,255,0.82);
+    --easing:       cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .agri-hero {
+    position: relative;
+    width: 100%;
+    min-height: clamp(520px, 100svh, 900px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--green-dark);
+  }
+
+  /* ── Background image ── */
+  .agri-hero__bg-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .agri-hero__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+    transform: scale(1.05);
+    animation: agri-zoom 18s ease-in-out forwards;
+  }
+
+  .agri-hero__bg-img--svg { opacity: 0.3; }
+
+  @keyframes agri-zoom {
+    from { transform: scale(1.05); }
+    to   { transform: scale(1.00); }
+  }
+
+  /* ── Gradient overlay ── */
+  .agri-hero__bg-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      105deg,
+      rgba(10,28,10,0.90) 0%,
+      rgba(10,28,10,0.62) 52%,
+      rgba(10,28,10,0.15) 100%
+    );
+  }
+
+  /* ── Grain texture ── */
+  .agri-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0.055;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  /* ── Content ── */
+  .agri-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: 680px;
+    padding: clamp(80px,12vw,140px) clamp(24px,6vw,80px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px,2.5vw,28px);
+  }
+
+  /* ── Badge ── */
+  .agri-hero__badge {
+    display: inline-flex;
+    width: fit-content;
+    border: 1.5px solid var(--gold);
+    border-radius: 999px;
+    padding: 7px 20px;
+  }
+
+  .agri-hero__badge span {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(12px,1.1vw,14px);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: var(--gold);
+  }
+
+  /* ── Heading ── */
+  .agri-hero__heading {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(44px,7vw,94px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin: 0;
+  }
+
+  /* ── Subtext ── */
+  .agri-hero__subtext {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(14px,1.3vw,16px);
+    line-height: 1.65;
+    color: var(--white-muted);
+    max-width: 480px;
+    margin: 0;
+  }
+
+  /* ── CTA row ── */
+  .agri-hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+
+  /* ── Buttons ── */
+  .agri-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(13px,1.1vw,15px);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: all 0.3s var(--easing);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .agri-hero__btn svg {
+    flex-shrink: 0;
+    transition: transform 0.3s var(--easing);
+  }
+
+  .agri-hero__btn:hover svg { transform: translateX(3px); }
+
+  /* primary */
+  .agri-hero__btn--primary {
+    background: var(--green-mid);
+    color: var(--white);
+    border: 2px solid var(--green-mid);
+  }
+
+  .agri-hero__btn--primary:hover {
+    background: var(--green-hover);
+    border-color: var(--green-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(26,77,30,0.45);
+  }
+
+  /* secondary */
+  .agri-hero__btn--secondary {
+    background: transparent;
+    color: var(--gold);
+    border: 2px solid var(--gold);
+  }
+
+  .agri-hero__btn--secondary:hover {
+    background: var(--gold-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,162,39,0.2);
+  }
+
+  /* ── Entrance animations ── */
+  [data-animate="fade-up"] {
+    opacity: 0;
+    transform: translateY(26px);
+    animation: agri-fade-up 0.7s ease forwards;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes agri-fade-up {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .agri-hero__content {
+      padding: 80px 20px 48px;
+    }
+    .agri-hero__ctas {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .agri-hero__btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Agri Hero",
+  "tag": "section",
+  "class": "agri-hero-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image",
+      "info": "Recommended: 1920×1080px landscape photo"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "We are Producing Natural Products"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OrganicFarming\nand Agriculture"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "A successful middle-sized farm may generate gross revenue in the range of $500,000 to $5 million annually, depending on the scale and type of operations."
+    },
+    {
+      "type": "header",
+      "content": "Primary Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_label",
+      "label": "Label",
+      "default": "Discover More"
+    },
+    {
+      "type": "url",
+      "id": "btn_primary_url",
+      "label": "URL"
+    },
+    {
+      "type": "header",
+      "content": "Secondary Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_secondary_label",
+      "label": "Label",
+      "default": "See All Service"
+    },
+    {
+      "type": "url",
+      "id": "btn_secondary_url",
+      "label": "URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Agri Hero",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}
