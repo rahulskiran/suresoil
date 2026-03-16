@@ -1,0 +1,216 @@
+{% schema %}
+{
+  "name": "Vertical Announcement Bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Animation"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical Padding",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal Padding",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll Speed (seconds)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Announcement Text",
+          "default": "Free Shipping on Orders Over ₹999"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (Optional)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Vertical Announcement Bar",
+      "blocks": [
+        { "type": "announcement" },
+        { "type": "announcement", "settings": { "text": "New Collection is Live!" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  #shopify-section-{{ section.id }} .vertical-announcement {
+    background: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ section.settings.padding_vertical }}px {{ section.settings.padding_horizontal }}px;
+  }
+
+  #shopify-section-{{ section.id }} .vertical-announcement__wrapper {
+    position: relative;
+    /* The height of the wrapper must match the line-height of the text for perfect centering */
+    height: 1.4em; 
+    width: 100%;
+    text-align: center;
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: {{ section.settings.font_weight }};
+  }
+
+  #shopify-section-{{ section.id }} .vertical-announcement__item {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.4em;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .vertical-announcement__item.active {
+    top: 0;
+    opacity: 1;
+  }
+
+  #shopify-section-{{ section.id }} .vertical-announcement__item.exit {
+    top: -100%;
+    opacity: 0;
+  }
+</style>
+
+<div class="vertical-announcement">
+  <div class="vertical-announcement__wrapper" id="announcement-{{ section.id }}">
+    {% for block in section.blocks %}
+      {% if block.settings.link != blank %}
+        <a href="{{ block.settings.link }}" class="vertical-announcement__item {% if forloop.first %}active{% endif %}" {{ block.shopify_attributes }}>
+          {{ block.settings.text }}
+        </a>
+      {% else %}
+        <div class="vertical-announcement__item {% if forloop.first %}active{% endif %}" {{ block.shopify_attributes }}>
+          {{ block.settings.text }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+(function () {
+  const initSlider = () => {
+    const container = document.getElementById("announcement-{{ section.id }}");
+    if (!container) return;
+
+    const items = container.querySelectorAll(".vertical-announcement__item");
+    if (items.length <= 1) return;
+
+    let index = 0;
+    const intervalTime = {{ section.settings.speed }} * 1000;
+
+    // Clear any existing interval if the section is reloaded in the editor
+    if (window.announcementInterval{{ section.id | replace: '-', '_' }}) {
+      clearInterval(window.announcementInterval{{ section.id | replace: '-', '_' }});
+    }
+
+    window.announcementInterval{{ section.id | replace: '-', '_' }} = setInterval(() => {
+      // Current item exits
+      items[index].classList.remove("active");
+      items[index].classList.add("exit");
+
+      const prevIndex = index;
+      index = (index + 1) % items.length;
+
+      // Next item becomes active
+      items[index].classList.remove("exit");
+      items[index].classList.add("active");
+
+      // Reset the exit class of the item that just left after transition completes
+      setTimeout(() => {
+        items[prevIndex].classList.remove("exit");
+      }, 600);
+    }, intervalTime);
+  };
+
+  // Run on load
+  document.addEventListener("DOMContentLoaded", initSlider);
+  
+  // Design Mode (Theme Editor) support
+  document.addEventListener("shopify:section:load", initSlider);
+})();
+</script>
