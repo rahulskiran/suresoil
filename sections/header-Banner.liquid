@@ -1,279 +1,230 @@
-{% comment %}
-  Organic Farming & Agriculture Hero Section
-  Shopify Liquid Template — drop into sections/organic-farming-hero.liquid
-{% endcomment %}
+{% comment %}Organic Farming Hero — sections/organic-farming-hero.liquid{% endcomment %}
 
-<section class="agri-hero" id="agri-hero-{{ section.id }}">
-  <div class="agri-hero__bg-overlay"></div>
+{%- liquid
+  assign pt_d  = section.settings.padding_top_desktop
+  assign pb_d  = section.settings.padding_bottom_desktop
+  assign ph_d  = section.settings.padding_horizontal_desktop
+  assign pt_m  = section.settings.padding_top_mobile
+  assign pb_m  = section.settings.padding_bottom_mobile
+  assign ph_m  = section.settings.padding_horizontal_mobile
+  assign s_id  = section.id
+-%}
 
-  {% if section.settings.bg_image != blank %}
-    <div class="agri-hero__bg-image">
-      {{
-        section.settings.bg_image
-        | image_url: width: 1920
-        | image_tag:
-          loading: 'eager',
-          fetchpriority: 'high',
-          class: 'agri-hero__bg-img',
-          alt: section.settings.bg_image.alt
-      }}
+<section class="ah" id="ah-{{ s_id }}">
+
+  {%- unless section.settings.bg_transparent -%}
+    <div class="ah__ov" aria-hidden="true"></div>
+  {%- endunless -%}
+
+  {%- if section.settings.bg_image != blank -%}
+    <div class="ah__bg" aria-hidden="true">
+      {{- section.settings.bg_image
+          | image_url: width: 1920
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '640,768,1024,1280,1440,1920',
+            sizes: '100vw',
+            class: 'ah__img',
+            alt: section.settings.bg_image.alt
+      -}}
     </div>
-  {% else %}
-    <div class="agri-hero__bg-image agri-hero__bg-image--placeholder">
-      {{ 'lifestyle-1' | placeholder_svg_tag: 'agri-hero__bg-img agri-hero__bg-img--svg' }}
+  {%- else -%}
+    <div class="ah__bg ah__bg--ph" aria-hidden="true">
+      {{- 'lifestyle-1' | placeholder_svg_tag: 'ah__img ah__img--svg' -}}
     </div>
-  {% endif %}
+  {%- endif -%}
 
-  <div class="agri-hero__content">
-
-    {% if section.settings.badge_text != blank %}
-      <div class="agri-hero__badge" data-animate="fade-up" style="--delay:0s">
+  <div class="ah__wrap">
+    {%- if section.settings.badge_text != blank -%}
+      <div class="ah__badge" style="--d:0s">
         <span>{{ section.settings.badge_text }}</span>
       </div>
-    {% endif %}
+    {%- endif -%}
 
-    {% if section.settings.heading != blank %}
-      <h1 class="agri-hero__heading" data-animate="fade-up" style="--delay:0.15s">
-        {{ section.settings.heading }}
-      </h1>
-    {% endif %}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="ah__h1" style="--d:.15s">{{ section.settings.heading }}</h1>
+    {%- endif -%}
 
-    {% if section.settings.subtext != blank %}
-      <p class="agri-hero__subtext" data-animate="fade-up" style="--delay:0.3s">
-        {{ section.settings.subtext }}
-      </p>
-    {% endif %}
+    {%- if section.settings.subtext != blank -%}
+      <p class="ah__sub" style="--d:.3s">{{ section.settings.subtext }}</p>
+    {%- endif -%}
 
-    <div class="agri-hero__ctas" data-animate="fade-up" style="--delay:0.45s">
-      {% if section.settings.btn_primary_label != blank %}
-        <a href="{{ section.settings.btn_primary_url }}" class="agri-hero__btn agri-hero__btn--primary">
-          <span>{{ section.settings.btn_primary_label }}</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8l4 4-4 4M8 12h8"/>
-          </svg>
-        </a>
-      {% endif %}
-
-      {% if section.settings.btn_secondary_label != blank %}
-        <a href="{{ section.settings.btn_secondary_url }}" class="agri-hero__btn agri-hero__btn--secondary">
-          <span>{{ section.settings.btn_secondary_label }}</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8l4 4-4 4M8 12h8"/>
-          </svg>
-        </a>
-      {% endif %}
-    </div>
-
+    {%- if section.settings.btn_primary_label != blank or section.settings.btn_secondary_label != blank -%}
+      <div class="ah__ctas" style="--d:.45s">
+        {%- if section.settings.btn_primary_label != blank -%}
+          <a href="{{ section.settings.btn_primary_url }}" class="ah__btn ah__btn--p">
+            {{- section.settings.btn_primary_label -}}
+            {%- if section.settings.show_btn_icons -%}
+              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.btn_secondary_label != blank -%}
+          <a href="{{ section.settings.btn_secondary_url }}" class="ah__btn ah__btn--s">
+            {{- section.settings.btn_secondary_label -}}
+            {%- if section.settings.show_btn_icons -%}
+              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
+
 </section>
 
 <style>
-  #agri-hero-{{ section.id }} {
-    --green-dark:   #0d1f0e;
-    --green-mid:    #1a4d1e;
-    --green-hover:  #255c2a;
-    --gold:         #c9a227;
-    --gold-hover:   rgba(201,162,39,0.12);
-    --white:        #ffffff;
-    --white-muted:  rgba(255,255,255,0.82);
-    --easing:       cubic-bezier(0.4,0,0.2,1);
+#ah-{{ s_id }}{
+  --cp:{{ section.settings.btn_primary_color }};
+  --cs:{{ section.settings.btn_secondary_color }};
+  --ch:{{ section.settings.heading_color }};
+  --cx:{{ section.settings.subtext_color }};
+  --cb:{{ section.settings.badge_text_color }};
+  --cbb:{{ section.settings.badge_border_color }};
+  --cpt:{{ section.settings.btn_primary_text_color }};
+  --oc:{{ section.settings.overlay_color }};
+  --oo:{{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  --od:{{ section.settings.overlay_direction }}deg;
+  --br:{{ section.settings.btn_border_radius }}px;
+  --bw:{{ section.settings.btn_border_width }}px;
+  --bpv:{{ section.settings.btn_padding_v }}px;
+  --bph:{{ section.settings.btn_padding_h }}px;
+  --fw:{{ section.settings.btn_font_weight }};
+  --gap:{{ section.settings.content_gap }}px;
+  --bgap:{{ section.settings.btn_gap }}px;
+  --smw:{{ section.settings.subtext_max_width }}px;
+  --cmw:{{ section.settings.content_max_width }}px;
+  --hfs:{{ section.settings.heading_font_size_desktop }}px;
+  --xfs:{{ section.settings.subtext_font_size_desktop }}px;
+  --bfs:{{ section.settings.badge_font_size_desktop }}px;
+  --tfs:{{ section.settings.btn_font_size_desktop }}px;
+  --hlh:{{ section.settings.heading_line_height | divided_by: 100.0 }};
+  --hls:{{ section.settings.heading_letter_spacing | divided_by: 1000.0 }}em;
+  --xlh:{{ section.settings.subtext_line_height | divided_by: 100.0 }};
+  --bls:{{ section.settings.badge_letter_spacing | divided_by: 1000.0 }}em;
+  --bbw:{{ section.settings.badge_border_width }}px;
+  --bpvp:{{ section.settings.badge_padding_v }}px;
+  --bphp:{{ section.settings.badge_padding_h }}px;
+}
+
+/* ── Section shell ── */
+.ah{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  display:flex;
+  align-items:{{ section.settings.vertical_alignment }};
+  background:{% if section.settings.bg_transparent %}transparent{% else %}{{ section.settings.section_bg_color }}{% endif %};
+  {%- case section.settings.layout_mode -%}
+    {%- when 'fullscreen' -%}min-height:100svh;
+    {%- when '16-9' -%}aspect-ratio:16/9;min-height:{{ section.settings.section_min_height_mobile }}px;
+    {%- when '21-9' -%}aspect-ratio:21/9;min-height:{{ section.settings.section_min_height_mobile }}px;
+    {%- when '4-5' -%}aspect-ratio:4/5;
+    {%- when '1-1' -%}aspect-ratio:1/1;
+    {%- else -%}min-height:{{ section.settings.section_min_height }}px;
+  {%- endcase -%}
+}
+
+/* ── Background ── */
+.ah__bg{position:absolute;inset:0;z-index:0}
+.ah__img{width:100%;height:100%;object-fit:cover;object-position:{{ section.settings.image_focal_point }};display:block;will-change:transform}
+.ah__img--svg{opacity:.3}
+{%- if section.settings.enable_kenburns -%}
+.ah__img{animation:ah-zoom {{ section.settings.kenburns_duration }}s ease-in-out forwards}
+@keyframes ah-zoom{from{transform:scale(1.05)}to{transform:scale(1)}}
+{%- endif -%}
+
+/* ── Overlay ── */
+{%- unless section.settings.bg_transparent -%}
+.ah__ov{position:absolute;inset:0;z-index:1;background:linear-gradient(var(--od),color-mix(in srgb,var(--oc) calc(var(--oo)*100%),transparent) 0%,color-mix(in srgb,var(--oc) calc(var(--oo)*68%),transparent) 52%,color-mix(in srgb,var(--oc) 10%,transparent) 100%)}
+{%- endunless -%}
+
+/* ── Grain ── */
+{%- if section.settings.enable_grain -%}
+.ah::after{content:'';position:absolute;inset:0;z-index:2;opacity:{{ section.settings.grain_opacity | divided_by: 100.0 }};pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px}
+{%- endif -%}
+
+/* ── Content wrapper ── */
+.ah__wrap{
+  position:relative;
+  z-index:3;
+  width:100%;
+  max-width:var(--cmw);
+  padding:{{ pt_d }}px {{ ph_d }}px {{ pb_d }}px;
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap);
+  text-align:{{ section.settings.content_alignment }};
+  {%- case section.settings.content_alignment -%}
+    {%- when 'center' -%}margin:0 auto;align-items:center;
+    {%- when 'right' -%}margin-left:auto;align-items:flex-end;
+    {%- else -%}align-items:flex-start;
+  {%- endcase -%}
+}
+
+/* ── Badge ── */
+.ah__badge{display:inline-flex;width:fit-content;border:var(--bbw) solid var(--cbb);border-radius:999px;padding:var(--bpvp) var(--bphp);background:{{ section.settings.badge_bg_color }}}
+.ah__badge span{font-family:{{ section.settings.body_font.family }},{{ section.settings.body_font.fallback_families }};font-weight:{{ section.settings.body_font.weight }};font-size:var(--bfs);letter-spacing:var(--bls);color:var(--cb)}
+
+/* ── Heading ── */
+.ah__h1{font-family:{{ section.settings.heading_font.family }},{{ section.settings.heading_font.fallback_families }};font-weight:{{ section.settings.heading_font.weight }};font-size:var(--hfs);line-height:var(--hlh);letter-spacing:var(--hls);color:var(--ch);margin:0}
+
+/* ── Subtext ── */
+.ah__sub{font-family:{{ section.settings.body_font.family }},{{ section.settings.body_font.fallback_families }};font-weight:{{ section.settings.body_font.weight }};font-size:var(--xfs);line-height:var(--xlh);color:var(--cx);max-width:var(--smw);margin:0}
+
+/* ── CTAs ── */
+.ah__ctas{display:flex;flex-wrap:wrap;gap:var(--bgap);align-items:center;
+  {%- if section.settings.content_alignment == 'center' -%}justify-content:center;{%- endif -%}
+  {%- if section.settings.content_alignment == 'right' -%}justify-content:flex-end;{%- endif -%}
+}
+
+/* ── Buttons ── */
+.ah__btn{display:inline-flex;align-items:center;gap:10px;padding:var(--bpv) var(--bph);border-radius:var(--br);font-family:{{ section.settings.body_font.family }},{{ section.settings.body_font.fallback_families }};font-size:var(--tfs);font-weight:var(--fw);text-decoration:none;white-space:nowrap;border:var(--bw) solid;transition:transform .25s ease,box-shadow .25s ease,background .2s ease}
+.ah__btn svg{flex-shrink:0;transition:transform .25s ease}
+.ah__btn:hover svg{transform:translateX(3px)}
+.ah__btn--p{background:var(--cp);color:var(--cpt);border-color:var(--cp)}
+.ah__btn--p:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 22px color-mix(in srgb,var(--cp) 45%,transparent)}
+.ah__btn--s{background:transparent;color:var(--cs);border-color:var(--cs)}
+.ah__btn--s:hover{background:color-mix(in srgb,var(--cs) 12%,transparent);transform:translateY(-2px);box-shadow:0 8px 22px color-mix(in srgb,var(--cs) 22%,transparent)}
+
+/* ── Divider ── */
+{%- if section.settings.show_bottom_divider -%}
+.ah::before{content:'';position:absolute;bottom:0;left:0;width:100%;height:{{ section.settings.divider_height }}px;background:{{ section.settings.divider_color }};z-index:4}
+{%- endif -%}
+
+/* ── Animations ── */
+{%- if section.settings.enable_animations -%}
+.ah__badge,.ah__h1,.ah__sub,.ah__ctas{opacity:0;transform:translateY(24px);animation:ah-up .65s ease forwards;animation-delay:var(--d,0s)}
+@keyframes ah-up{to{opacity:1;transform:translateY(0)}}
+{%- endif -%}
+
+/* ── Mobile ── */
+@media(max-width:767px){
+  .ah{
+    {%- case section.settings.layout_mode -%}
+      {%- when 'fullscreen' -%}min-height:100svh;
+      {%- when '4-5' -%}aspect-ratio:4/5;
+      {%- when '1-1' -%}aspect-ratio:1/1;
+      {%- when '16-9' -%}aspect-ratio:unset;min-height:{{ section.settings.section_min_height_mobile }}px;
+      {%- when '21-9' -%}aspect-ratio:unset;min-height:{{ section.settings.section_min_height_mobile }}px;
+      {%- else -%}min-height:{{ section.settings.section_min_height_mobile }}px;
+    {%- endcase -%}
   }
-
-  .agri-hero {
-    position: relative;
-    width: 100%;
-    min-height: clamp(520px, 100svh, 900px);
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    background: var(--green-dark);
-  }
-
-  /* ── Background image ── */
-  .agri-hero__bg-image {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  .agri-hero__bg-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 30%;
-    display: block;
-    transform: scale(1.05);
-    animation: agri-zoom 18s ease-in-out forwards;
-  }
-
-  .agri-hero__bg-img--svg { opacity: 0.3; }
-
-  @keyframes agri-zoom {
-    from { transform: scale(1.05); }
-    to   { transform: scale(1.00); }
-  }
-
-  /* ── Gradient overlay ── */
-  .agri-hero__bg-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: linear-gradient(
-      105deg,
-      rgba(10,28,10,0.90) 0%,
-      rgba(10,28,10,0.62) 52%,
-      rgba(10,28,10,0.15) 100%
-    );
-  }
-
-  /* ── Grain texture ── */
-  .agri-hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    opacity: 0.055;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-  }
-
-  /* ── Content ── */
-  .agri-hero__content {
-    position: relative;
-    z-index: 3;
-    max-width: 680px;
-    padding: clamp(80px,12vw,140px) clamp(24px,6vw,80px);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(16px,2.5vw,28px);
-  }
-
-  /* ── Badge ── */
-  .agri-hero__badge {
-    display: inline-flex;
-    width: fit-content;
-    border: 1.5px solid var(--gold);
-    border-radius: 999px;
-    padding: 7px 20px;
-  }
-
-  .agri-hero__badge span {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(12px,1.1vw,14px);
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    color: var(--gold);
-  }
-
-  /* ── Heading ── */
-  .agri-hero__heading {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(44px,7vw,94px);
-    font-weight: 800;
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-    color: var(--white);
-    margin: 0;
-  }
-
-  /* ── Subtext ── */
-  .agri-hero__subtext {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(14px,1.3vw,16px);
-    line-height: 1.65;
-    color: var(--white-muted);
-    max-width: 480px;
-    margin: 0;
-  }
-
-  /* ── CTA row ── */
-  .agri-hero__ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    align-items: center;
-  }
-
-  /* ── Buttons ── */
-  .agri-hero__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 26px;
-    border-radius: 999px;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(13px,1.1vw,15px);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    text-decoration: none;
-    transition: all 0.3s var(--easing);
-    white-space: nowrap;
-    cursor: pointer;
-  }
-
-  .agri-hero__btn svg {
-    flex-shrink: 0;
-    transition: transform 0.3s var(--easing);
-  }
-
-  .agri-hero__btn:hover svg { transform: translateX(3px); }
-
-  /* primary */
-  .agri-hero__btn--primary {
-    background: var(--green-mid);
-    color: var(--white);
-    border: 2px solid var(--green-mid);
-  }
-
-  .agri-hero__btn--primary:hover {
-    background: var(--green-hover);
-    border-color: var(--green-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(26,77,30,0.45);
-  }
-
-  /* secondary */
-  .agri-hero__btn--secondary {
-    background: transparent;
-    color: var(--gold);
-    border: 2px solid var(--gold);
-  }
-
-  .agri-hero__btn--secondary:hover {
-    background: var(--gold-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(201,162,39,0.2);
-  }
-
-  /* ── Entrance animations ── */
-  [data-animate="fade-up"] {
-    opacity: 0;
-    transform: translateY(26px);
-    animation: agri-fade-up 0.7s ease forwards;
-    animation-delay: var(--delay, 0s);
-  }
-
-  @keyframes agri-fade-up {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── Mobile ── */
-  @media (max-width: 640px) {
-    .agri-hero__content {
-      padding: 80px 20px 48px;
-    }
-    .agri-hero__ctas {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .agri-hero__btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
+  .ah__wrap{padding:{{ pt_m }}px {{ ph_m }}px {{ pb_m }}px}
+  .ah__h1{font-size:{{ section.settings.heading_font_size_mobile }}px}
+  .ah__sub{font-size:{{ section.settings.subtext_font_size_mobile }}px}
+  .ah__badge span{font-size:{{ section.settings.badge_font_size_mobile }}px}
+  .ah__btn{font-size:{{ section.settings.btn_font_size_mobile }}px}
+  {%- if section.settings.mobile_center_content -%}
+  .ah__wrap{align-items:center;text-align:center}
+  .ah__ctas{justify-content:center}
+  {%- endif -%}
+  {%- if section.settings.mobile_stack_buttons -%}
+  .ah__ctas{flex-direction:column;width:100%}
+  .ah__btn{width:100%;justify-content:center}
+  {%- endif -%}
+}
 </style>
 
 {% schema %}
@@ -282,20 +233,481 @@
   "tag": "section",
   "class": "agri-hero-section",
   "settings": [
+
+    { "type": "header", "content": "─── Layout Mode ──────────────────" },
     {
-      "type": "header",
-      "content": "Background"
+      "type": "select",
+      "id": "layout_mode",
+      "label": "Hero Layout",
+      "info": "Controls the height and aspect ratio of the section",
+      "options": [
+        { "value": "fullscreen", "label": "Full Screen (100vh)" },
+        { "value": "16-9",       "label": "16:9 Widescreen" },
+        { "value": "21-9",       "label": "21:9 Super Wide" },
+        { "value": "4-5",        "label": "4:5 Portrait" },
+        { "value": "1-1",        "label": "1:1 Square" },
+        { "value": "fixed",      "label": "Fixed Height (px)" }
+      ],
+      "default": "fixed"
     },
+    {
+      "type": "range",
+      "id": "section_min_height",
+      "label": "Fixed / Min Height — Desktop (px)",
+      "info": "Used when layout is Fixed, or as min-height fallback",
+      "min": 300, "max": 1000, "step": 10,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "section_min_height_mobile",
+      "label": "Min Height — Mobile (px)",
+      "info": "Applied on mobile for 16:9 and 21:9 layouts",
+      "min": 300, "max": 900, "step": 10,
+      "default": 520
+    },
+
+    { "type": "header", "content": "─── Background ───────────────────" },
     {
       "type": "image_picker",
       "id": "bg_image",
       "label": "Background Image",
-      "info": "Recommended: 1920×1080px landscape photo"
+      "info": "Recommended: 1920×1080px or larger"
     },
     {
-      "type": "header",
-      "content": "Content"
+      "type": "select",
+      "id": "image_focal_point",
+      "label": "Image Focal Point",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top",    "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center",   "label": "Left" },
+        { "value": "right center",  "label": "Right" }
+      ],
+      "default": "center center"
     },
+    {
+      "type": "checkbox",
+      "id": "bg_transparent",
+      "label": "Transparent Background (removes overlay + section color)",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Color",
+      "default": "#0d1f0e"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#0a1c0a"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity (%)",
+      "min": 0, "max": 100, "step": 5,
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "overlay_direction",
+      "label": "Overlay Gradient Angle (°)",
+      "min": 0, "max": 360, "step": 5,
+      "default": 105
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_grain",
+      "label": "Enable Grain Texture",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "grain_opacity",
+      "label": "Grain Opacity (%)",
+      "min": 1, "max": 20, "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_kenburns",
+      "label": "Enable Ken Burns Zoom",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "kenburns_duration",
+      "label": "Ken Burns Duration (seconds)",
+      "min": 6, "max": 30, "step": 1,
+      "default": 18
+    },
+
+    { "type": "header", "content": "─── Padding — Desktop ────────────" },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding Top — Desktop (px)",
+      "min": 0, "max": 240, "step": 4,
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding Bottom — Desktop (px)",
+      "min": 0, "max": 240, "step": 4,
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_desktop",
+      "label": "Padding Horizontal — Desktop (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 80
+    },
+
+    { "type": "header", "content": "─── Padding — Mobile ─────────────" },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top — Mobile (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom — Mobile (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "label": "Padding Horizontal — Mobile (px)",
+      "min": 0, "max": 80, "step": 4,
+      "default": 20
+    },
+
+    { "type": "header", "content": "─── Fonts ────────────────────────" },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body / Badge / Button Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height",
+      "label": "Heading Line Height",
+      "min": 80, "max": 200, "step": 5,
+      "default": 100,
+      "info": "Value ÷ 100 = line-height (e.g. 100 = 1.0)"
+    },
+    {
+      "type": "range",
+      "id": "heading_letter_spacing",
+      "label": "Heading Letter Spacing (×0.001em)",
+      "min": -50, "max": 100, "step": 5,
+      "default": -20,
+      "info": "Value ÷ 1000 = em (e.g. -20 = -0.02em)"
+    },
+    {
+      "type": "range",
+      "id": "subtext_line_height",
+      "label": "Subtext Line Height",
+      "min": 100, "max": 250, "step": 5,
+      "default": 165,
+      "info": "Value ÷ 100 = line-height (e.g. 165 = 1.65)"
+    },
+    {
+      "type": "range",
+      "id": "badge_letter_spacing",
+      "label": "Badge Letter Spacing (×0.001em)",
+      "min": 0, "max": 200, "step": 5,
+      "default": 30,
+      "info": "Value ÷ 1000 = em (e.g. 30 = 0.03em)"
+    },
+
+    { "type": "header", "content": "─── Font Sizes — Desktop ─────────" },
+    {
+      "type": "range",
+      "id": "heading_font_size_desktop",
+      "label": "Heading — Desktop (px)",
+      "min": 28, "max": 120, "step": 2,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "subtext_font_size_desktop",
+      "label": "Subtext — Desktop (px)",
+      "min": 12, "max": 32, "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size_desktop",
+      "label": "Badge — Desktop (px)",
+      "min": 10, "max": 24, "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size_desktop",
+      "label": "Button — Desktop (px)",
+      "min": 10, "max": 24, "step": 1,
+      "default": 15
+    },
+
+    { "type": "header", "content": "─── Font Sizes — Mobile ──────────" },
+    {
+      "type": "range",
+      "id": "heading_font_size_mobile",
+      "label": "Heading — Mobile (px)",
+      "min": 24, "max": 80, "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "subtext_font_size_mobile",
+      "label": "Subtext — Mobile (px)",
+      "min": 11, "max": 24, "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size_mobile",
+      "label": "Badge — Mobile (px)",
+      "min": 10, "max": 20, "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size_mobile",
+      "label": "Button — Mobile (px)",
+      "min": 10, "max": 20, "step": 1,
+      "default": 14
+    },
+
+    { "type": "header", "content": "─── Colors ───────────────────────" },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext Color",
+      "default": "#d1d1d1"
+    },
+
+    { "type": "header", "content": "─── Badge ────────────────────────" },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#c9a227"
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge Border Color",
+      "default": "#c9a227"
+    },
+    {
+      "type": "color_background",
+      "id": "badge_bg_color",
+      "label": "Badge Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_width",
+      "label": "Badge Border Width (px)",
+      "min": 0, "max": 4, "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_v",
+      "label": "Badge Padding Vertical (px)",
+      "min": 2, "max": 20, "step": 1,
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_h",
+      "label": "Badge Padding Horizontal (px)",
+      "min": 8, "max": 40, "step": 1,
+      "default": 20
+    },
+
+    { "type": "header", "content": "─── Buttons ──────────────────────" },
+    {
+      "type": "color",
+      "id": "btn_primary_color",
+      "label": "Primary Button Background",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_text_color",
+      "label": "Primary Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_color",
+      "label": "Secondary Button / Border Color",
+      "default": "#c9a227"
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radius",
+      "label": "Button Border Radius (px)",
+      "min": 0, "max": 60, "step": 2,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "btn_border_width",
+      "label": "Button Border Width (px)",
+      "min": 0, "max": 6, "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_v",
+      "label": "Button Padding Vertical (px)",
+      "min": 6, "max": 30, "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_h",
+      "label": "Button Padding Horizontal (px)",
+      "min": 10, "max": 60, "step": 2,
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "btn_font_weight",
+      "label": "Button Font Weight",
+      "min": 300, "max": 800, "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "btn_gap",
+      "label": "Gap Between Buttons (px)",
+      "min": 4, "max": 40, "step": 2,
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "show_btn_icons",
+      "label": "Show Arrow Icons on Buttons",
+      "default": true
+    },
+
+    { "type": "header", "content": "─── Layout & Alignment ───────────" },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical Alignment",
+      "options": [
+        { "value": "flex-start", "label": "Top" },
+        { "value": "center",     "label": "Middle" },
+        { "value": "flex-end",   "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content Max Width (px)",
+      "min": 320, "max": 1400, "step": 20,
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "subtext_max_width",
+      "label": "Subtext Max Width (px)",
+      "min": 200, "max": 900, "step": 20,
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Gap Between Content Blocks (px)",
+      "min": 4, "max": 60, "step": 2,
+      "default": 24
+    },
+
+    { "type": "header", "content": "─── Mobile Behaviour ─────────────" },
+    {
+      "type": "checkbox",
+      "id": "mobile_center_content",
+      "label": "Center Content on Mobile",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_stack_buttons",
+      "label": "Stack Buttons Full-Width on Mobile",
+      "default": true
+    },
+
+    { "type": "header", "content": "─── Decorative ───────────────────" },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable Fade-Up Animations",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_divider",
+      "label": "Show Bottom Divider Strip",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider Color",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "range",
+      "id": "divider_height",
+      "label": "Divider Height (px)",
+      "min": 1, "max": 20, "step": 1,
+      "default": 4
+    },
+
+    { "type": "header", "content": "─── Content ──────────────────────" },
     {
       "type": "text",
       "id": "badge_text",
@@ -314,10 +726,8 @@
       "label": "Subtext",
       "default": "A successful middle-sized farm may generate gross revenue in the range of $500,000 to $5 million annually, depending on the scale and type of operations."
     },
-    {
-      "type": "header",
-      "content": "Primary Button"
-    },
+
+    { "type": "header", "content": "─── Primary Button ───────────────" },
     {
       "type": "text",
       "id": "btn_primary_label",
@@ -329,10 +739,8 @@
       "id": "btn_primary_url",
       "label": "URL"
     },
-    {
-      "type": "header",
-      "content": "Secondary Button"
-    },
+
+    { "type": "header", "content": "─── Secondary Button ─────────────" },
     {
       "type": "text",
       "id": "btn_secondary_label",
@@ -344,6 +752,7 @@
       "id": "btn_secondary_url",
       "label": "URL"
     }
+
   ],
   "presets": [
     {
