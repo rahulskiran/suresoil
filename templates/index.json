@@ -29,7 +29,7 @@
         "portrait_image": "shopify://shop_images/Screenshot_2026-03-16_at_4.45.24_PM.png",
         "portrait_aspect_ratio": "3/4",
         "portrait_border_radius": 12,
-        "portrait_max_width": 45,
+        "portrait_max_width": 40,
         "padding_top_desktop": 100,
         "padding_bottom_desktop": 100,
         "padding_horizontal_desktop": 60,
@@ -88,6 +88,41 @@
         "btn_primary_url": "",
         "btn_secondary_label": "See All Service",
         "btn_secondary_url": ""
+      }
+    },
+    "trust_indicator_TC7jed": {
+      "type": "trust-indicator",
+      "name": "Trust Indicator Bar",
+      "settings": {
+        "bg_color": "#E9AD00",
+        "text_color": "#1a2e05",
+        "accent_color": "#0e8c73",
+        "avatar_border_color": "#E9AD00",
+        "seal_bg_color": "#1a3a1a",
+        "seal_text_color": "#2d4a1e",
+        "seal_icon_color": "#4ade80",
+        "seal_text": "•  STOPS MITES & APHIDS  •  CONCENTRATED FORMULA",
+        "seal_size": 130,
+        "seal_icon_size": 50,
+        "seal_speed": 15,
+        "proof_heading": "Trusted by 12,000+ European Growers",
+        "proof_sub": "98.4% Efficacy Rate",
+        "video_url": "",
+        "play_btn_color": "#ffffff",
+        "video_heading": "Watch: The 4-Day Recovery",
+        "video_link_label": "View Application Guide",
+        "video_link_url": "",
+        "max_width": 1200,
+        "padding_v": 24,
+        "padding_h": 40,
+        "block_gap": 40,
+        "heading_size": 15,
+        "sub_size": 13,
+        "thumb_width": 140,
+        "thumb_radius": 8,
+        "show_leaf_pattern": true,
+        "leaf_color": "#b8860b",
+        "leaf_opacity": 20
       }
     },
     "product_list_fa6P9H": {
@@ -287,6 +322,7 @@
   },
   "order": [
     "new_hero_44TX4j",
+    "trust_indicator_TC7jed",
     "product_list_fa6P9H"
   ]
 }
