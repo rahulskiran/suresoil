@@ -1,0 +1,402 @@
+{% comment %}
+  Premium FAQ Section
+  Add this file to your sections folder and include it in your templates.
+{% endcomment %}
+
+{{ 'faq-section.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Scoped CSS to ensure it works beautifully on any Shopify theme */
+  .premium-faq-{{ section.id }} {
+    min-height: 100vh;
+    background-color: #F8FAF9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-family: system-ui, -apple-system, sans-serif;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  @media (min-width: 768px) {
+    .premium-faq-{{ section.id }} {
+      padding: 2rem;
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+
+  /* Decorative Blur */
+  .faq-blur-bg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    height: 24rem;
+    background-color: rgba(209, 250, 229, 0.5); /* emerald-100 */
+    filter: blur(120px);
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Header Styles */
+  .faq-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .faq-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #d1fae5;
+    color: #065f46;
+    margin-bottom: 1rem;
+    transform: rotate(-3deg);
+    transition: transform 0.5s ease;
+  }
+
+  .faq-icon-wrapper:hover {
+    transform: rotate(0deg);
+  }
+
+  .faq-title {
+    font-size: 2.25rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.25rem;
+    margin-top: 0;
+  }
+
+  @media (min-width: 768px) {
+    .faq-title {
+      font-size: 3rem;
+    }
+  }
+
+  .faq-subtitle {
+    color: #64748b;
+    font-size: 1.125rem;
+    max-width: 36rem;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* Card Styles */
+  .faq-card-container {
+    max-width: 56rem;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+  }
+
+  .faq-card-glow {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    bottom: -0.25rem;
+    left: -0.25rem;
+    background: linear-gradient(to bottom, rgba(250, 204, 21, 0.2), rgba(6, 78, 59, 0.2));
+    border-radius: 2.5rem;
+    filter: blur(20px);
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  .faq-card {
+    position: relative;
+    background-color: #022c22; /* emerald-950 */
+    border-radius: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    border: 1px solid rgba(6, 95, 70, 0.5); /* emerald-800 */
+  }
+
+  .faq-card-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(52, 211, 153, 0.3), transparent);
+  }
+
+  /* Accordion Items */
+  .faq-item {
+    border-bottom: 1px solid rgba(6, 95, 70, 0.4);
+    transition: all 0.5s ease-in-out;
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .faq-item:hover {
+    background-color: rgba(6, 78, 59, 0.1);
+  }
+
+  .faq-item.is-open {
+    background-color: rgba(6, 78, 59, 0.3);
+  }
+
+  .faq-question-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  @media (min-width: 768px) {
+    .faq-question-btn {
+      padding: 2rem;
+    }
+  }
+
+  .faq-question-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+    color: #ecfdf5; /* emerald-50 */
+    transition: color 0.3s ease;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .faq-question-text {
+      font-size: 1.25rem;
+    }
+  }
+
+  .faq-question-btn:hover .faq-question-text {
+    color: #ffffff;
+  }
+
+  .faq-item.is-open .faq-question-text {
+    color: #facc15; /* yellow-400 */
+  }
+
+  .faq-toggle-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(4, 120, 87, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #34d399; /* emerald-400 */
+    transition: all 0.5s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .faq-question-btn:hover .faq-toggle-icon {
+    border-color: #34d399;
+    background-color: rgba(6, 95, 70, 0.5);
+  }
+
+  .faq-item.is-open .faq-toggle-icon {
+    background-color: #facc15;
+    border-color: #facc15;
+    color: #022c22;
+    transform: rotate(180deg);
+  }
+
+  .faq-toggle-icon svg {
+    transition: stroke-width 0.3s ease;
+  }
+
+  /* Answer Animation (CSS Grid trick for smooth auto-height) */
+  .faq-answer-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .faq-item.is-open .faq-answer-wrapper {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .faq-answer-inner {
+    overflow: hidden;
+  }
+
+  .faq-answer-text {
+    color: rgba(209, 250, 229, 0.7); /* emerald-100/70 */
+    line-height: 1.625;
+    font-size: 1rem;
+    font-weight: 300;
+    padding: 0 1.5rem 2rem 1.5rem;
+    margin-top: -0.5rem;
+    padding-right: 4rem;
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 768px) {
+    .faq-answer-text {
+      font-size: 1.125rem;
+      padding: 0 2rem 2rem 2rem;
+      padding-right: 6rem;
+    }
+  }
+</style>
+
+<div class="premium-faq-{{ section.id }}">
+  <!-- Premium background decorative blur -->
+  <div class="faq-blur-bg"></div>
+
+  <!-- Header Section -->
+  <div class="faq-header">
+    <div class="faq-icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <path d="M12 17h.01"/>
+      </svg>
+    </div>
+    <h2 class="faq-title">{{ section.settings.heading | escape }}</h2>
+    {% if section.settings.subheading != blank %}
+      <p class="faq-subtitle">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Premium FAQ Card -->
+  <div class="faq-card-container">
+    <div class="faq-card-glow"></div>
+    
+    <div class="faq-card">
+      <div class="faq-card-highlight"></div>
+      
+      <div class="faq-list">
+        {% for block in section.blocks %}
+          <div class="faq-item {% if forloop.first %}is-open{% endif %}" {{ block.shopify_attributes }}>
+            <button class="faq-question-btn" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+              <h3 class="faq-question-text">{{ block.settings.question | escape }}</h3>
+              
+              <div class="faq-toggle-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{% if forloop.first %}2.5{% else %}2{% endif %}" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </div>
+            </button>
+            
+            <div class="faq-answer-wrapper">
+              <div class="faq-answer-inner">
+                <p class="faq-answer-text">
+                  {{ block.settings.answer | escape }}
+                </p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Isolate logic to this specific section in case of multiple FAQ sections
+    const section = document.querySelector('.premium-faq-{{ section.id }}');
+    if (!section) return;
+
+    const faqItems = section.querySelectorAll('.faq-item');
+
+    faqItems.forEach((item) => {
+      const btn = item.querySelector('.faq-question-btn');
+      
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+
+        // Close all items (Accordion style behavior)
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('is-open');
+          const otherBtn = otherItem.querySelector('.faq-question-btn');
+          otherBtn.setAttribute('aria-expanded', 'false');
+          otherBtn.querySelector('.faq-toggle-icon svg').setAttribute('stroke-width', '2');
+        });
+
+        // Open the clicked item if it wasn't already open
+        if (!isOpen) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.querySelector('.faq-toggle-icon svg').setAttribute('stroke-width', '2.5');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Premium FAQ Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Everything you need to know about the product, shipping, and billing."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How do I track my order?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "We will provide you with a tracking number via email once your order is confirmed. You can use this link to monitor your shipment's progress directly via our shipping partner's portal."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium FAQ Section",
+      "blocks": [
+        { "type": "faq_item" },
+        { "type": "faq_item", "settings": { "question": "How do I track shipping?", "answer": "Similar to tracking your order, your shipping tracking number will be provided in your dispatch email, and you can get detailed updates on your shipping partner's website 24/7." } },
+        { "type": "faq_item", "settings": { "question": "How do I return any products?", "answer": "Please visit our returns portal and follow the step-by-step instructions. We offer various return methods to make the process as easy and seamless as possible for our customers." } },
+        { "type": "faq_item", "settings": { "question": "What are the available payment options?", "answer": "We offer multiple secure payment methods including all major Credit Cards, PayPal, Apple Pay, and Google Pay. You can view the full list of options during the checkout process." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
