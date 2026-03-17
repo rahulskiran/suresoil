@@ -103,6 +103,10 @@
 
 </section>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 #tm-{{ s_id }}{
   --tm-bg:{{ section.settings.bg_color }};
@@ -123,6 +127,7 @@
   background:var(--tm-bg);
   padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
   overflow:hidden;
+  font-family:'Inter',sans-serif;
 }
 
 /* ── Header ── */
@@ -144,6 +149,7 @@
 }
 
 .tm__heading{
+  font-family:'Inter',sans-serif;
   font-size:{{ section.settings.heading_size }}px;
   font-weight:800;
   font-style:italic;
@@ -246,6 +252,7 @@
   display:flex;align-items:center;justify-content:center;
 }
 .tm__avatar--placeholder span{
+  font-family:'Inter',sans-serif;
   font-size:14px;font-weight:700;
   color:var(--tm-avatar-txt);
   text-transform:uppercase;

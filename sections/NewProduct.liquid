@@ -4,6 +4,7 @@
   assign s_id = section.id
   assign features = section.blocks | where: 'type', 'feature'
   assign variants = section.blocks | where: 'type', 'size_variant'
+  assign gallery_blocks = section.blocks | where: 'type', 'gallery_image'
   assign default_variant = nil
   for v in variants
     if v.settings.selected
@@ -14,13 +15,49 @@
   unless default_variant
     assign default_variant = variants.first
   endunless
+
+  assign linked_product = section.settings.linked_product
+  assign has_product = false
+  if linked_product != blank and linked_product != empty
+    assign has_product = true
+  endif
+
+  if has_product
+    assign p_title = linked_product.title
+    assign p_desc = linked_product.description | strip_html | truncate: 300
+    assign p_price = linked_product.price | money
+    assign p_compare = linked_product.compare_at_price | money
+    assign p_available = linked_product.available
+    assign p_url = linked_product.url
+    assign p_images = linked_product.images
+  endif
+
+  assign display_heading = section.settings.heading
+  if display_heading == blank and has_product
+    assign display_heading = p_title
+  endif
+
+  assign display_desc = section.settings.description
+  if display_desc == blank and has_product
+    assign display_desc = p_desc
+  endif
+
+  assign display_price = section.settings.price
+  if display_price == blank and has_product
+    assign display_price = p_price
+  endif
+
+  assign display_btn_url = section.settings.btn_primary_url
+  if display_btn_url == blank and has_product
+    assign display_btn_url = p_url
+  endif
 -%}
 
 <section class="np" id="np-{{ s_id }}">
   <div class="np__wrap">
     <div class="np__grid">
 
-      {%- comment -%}── Left: Studio product display ──{%- endcomment -%}
+      {%- comment -%}── Left: Studio product display with gallery ──{%- endcomment -%}
       <div class="np__media np__reveal">
         <div class="np__studio">
 
@@ -32,8 +69,11 @@
           {%- endif -%}
 
           <div class="np__img-stage">
-            <div class="np__img-frame np__img-frame--default{% if default_variant == nil or default_variant.settings.image == blank %} np__img-frame--active{% endif %}">
-              {%- if section.settings.product_image != blank -%}
+            {%- comment -%}Build unified gallery from: section image → product images → gallery blocks → variant images{%- endcomment -%}
+            {%- assign gallery_index = 0 -%}
+
+            {%- if section.settings.product_image != blank -%}
+              <div class="np__img-frame{% if gallery_index == 0 %} np__img-frame--active{% endif %}" data-gallery-idx="{{ gallery_index }}">
                 {{- section.settings.product_image
                     | image_url: width: 900
                     | image_tag:
@@ -41,15 +81,50 @@
                       widths: '400,600,900',
                       sizes: '(max-width: 767px) 80vw, 40vw',
                       class: 'np__product-img',
-                      alt: section.settings.heading
+                      alt: display_heading
                 -}}
-              {%- else -%}
-                {{ 'product-1' | placeholder_svg_tag: 'np__product-img np__product-img--ph' }}
+              </div>
+              {%- assign gallery_index = gallery_index | plus: 1 -%}
+            {%- endif -%}
+
+            {%- if has_product -%}
+              {%- for img in p_images -%}
+                {%- if section.settings.product_image != blank and forloop.first -%}{%- continue -%}{%- endif -%}
+                <div class="np__img-frame{% if gallery_index == 0 %} np__img-frame--active{% endif %}" data-gallery-idx="{{ gallery_index }}">
+                  {{- img
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '400,600,900',
+                        sizes: '(max-width: 767px) 80vw, 40vw',
+                        class: 'np__product-img',
+                        alt: display_heading
+                  -}}
+                </div>
+                {%- assign gallery_index = gallery_index | plus: 1 -%}
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- for block in gallery_blocks -%}
+              {%- if block.settings.image != blank -%}
+                <div class="np__img-frame{% if gallery_index == 0 %} np__img-frame--active{% endif %}" data-gallery-idx="{{ gallery_index }}" {{ block.shopify_attributes }}>
+                  {{- block.settings.image
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '400,600,900',
+                        sizes: '(max-width: 767px) 80vw, 40vw',
+                        class: 'np__product-img',
+                        alt: block.settings.alt_text | default: display_heading
+                  -}}
+                </div>
+                {%- assign gallery_index = gallery_index | plus: 1 -%}
               {%- endif -%}
-            </div>
+            {%- endfor -%}
+
             {%- for block in variants -%}
               {%- if block.settings.image != blank -%}
-                <div class="np__img-frame{% if default_variant.id == block.id %} np__img-frame--active{% endif %}" data-variant-img="{{ block.id }}">
+                <div class="np__img-frame" data-gallery-idx="{{ gallery_index }}" data-variant-img="{{ block.id }}">
                   {{- block.settings.image
                       | image_url: width: 900
                       | image_tag:
@@ -60,9 +135,73 @@
                         alt: block.settings.label
                   -}}
                 </div>
+                {%- assign gallery_index = gallery_index | plus: 1 -%}
               {%- endif -%}
             {%- endfor -%}
+
+            {%- if gallery_index == 0 -%}
+              <div class="np__img-frame np__img-frame--active" data-gallery-idx="0">
+                {{ 'product-1' | placeholder_svg_tag: 'np__product-img np__product-img--ph' }}
+              </div>
+              {%- assign gallery_index = 1 -%}
+            {%- endif -%}
+
+            {%- assign total_gallery = gallery_index -%}
           </div>
+
+          {%- comment -%}── Thumbnail strip ──{%- endcomment -%}
+          {%- if total_gallery > 1 -%}
+            <div class="np__thumbs" data-np-thumbs>
+              {%- assign thumb_idx = 0 -%}
+
+              {%- if section.settings.product_image != blank -%}
+                <button class="np__thumb np__thumb--active" type="button" data-thumb-idx="{{ thumb_idx }}">
+                  {{- section.settings.product_image
+                      | image_url: width: 120
+                      | image_tag: loading: 'lazy', class: 'np__thumb-img', alt: display_heading
+                  -}}
+                </button>
+                {%- assign thumb_idx = thumb_idx | plus: 1 -%}
+              {%- endif -%}
+
+              {%- if has_product -%}
+                {%- for img in p_images -%}
+                  {%- if section.settings.product_image != blank and forloop.first -%}{%- continue -%}{%- endif -%}
+                  <button class="np__thumb{% if thumb_idx == 0 %} np__thumb--active{% endif %}" type="button" data-thumb-idx="{{ thumb_idx }}">
+                    {{- img
+                        | image_url: width: 120
+                        | image_tag: loading: 'lazy', class: 'np__thumb-img', alt: display_heading
+                    -}}
+                  </button>
+                  {%- assign thumb_idx = thumb_idx | plus: 1 -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- for block in gallery_blocks -%}
+                {%- if block.settings.image != blank -%}
+                  <button class="np__thumb{% if thumb_idx == 0 %} np__thumb--active{% endif %}" type="button" data-thumb-idx="{{ thumb_idx }}">
+                    {{- block.settings.image
+                        | image_url: width: 120
+                        | image_tag: loading: 'lazy', class: 'np__thumb-img', alt: block.settings.alt_text | default: display_heading
+                    -}}
+                  </button>
+                  {%- assign thumb_idx = thumb_idx | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- for block in variants -%}
+                {%- if block.settings.image != blank -%}
+                  <button class="np__thumb{% if thumb_idx == 0 %} np__thumb--active{% endif %}" type="button" data-thumb-idx="{{ thumb_idx }}">
+                    {{- block.settings.image
+                        | image_url: width: 120
+                        | image_tag: loading: 'lazy', class: 'np__thumb-img', alt: block.settings.label
+                    -}}
+                  </button>
+                  {%- assign thumb_idx = thumb_idx | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
 
           {%- assign show_coverage = false -%}
           {%- for v in variants -%}
@@ -96,13 +235,13 @@
         {%- endif -%}
 
         {%- comment -%}2. Product name — clear, dominant{%- endcomment -%}
-        {%- if section.settings.heading != blank -%}
-          <h2 class="np__heading np__reveal">{{ section.settings.heading }}</h2>
+        {%- if display_heading != blank -%}
+          <h2 class="np__heading np__reveal">{{ display_heading }}</h2>
         {%- endif -%}
 
         {%- comment -%}3. One-liner value proposition{%- endcomment -%}
-        {%- if section.settings.description != blank -%}
-          <p class="np__desc np__reveal">{{ section.settings.description }}</p>
+        {%- if display_desc != blank -%}
+          <p class="np__desc np__reveal">{{ display_desc }}</p>
         {%- endif -%}
 
         {%- comment -%}4. Benefit chips — scannable, compact{%- endcomment -%}
@@ -150,11 +289,19 @@
         {%- endif -%}
 
         {%- comment -%}6. Price anchoring block{%- endcomment -%}
+        {%- assign show_compare = false -%}
+        {%- if default_variant.settings.compare_price != blank -%}
+          {%- assign show_compare = true -%}
+          {%- assign display_compare = default_variant.settings.compare_price -%}
+        {%- elsif has_product and linked_product.compare_at_price > linked_product.price -%}
+          {%- assign show_compare = true -%}
+          {%- assign display_compare = p_compare -%}
+        {%- endif -%}
         <div class="np__price-block np__reveal">
           <div class="np__price-row">
-            <span class="np__price" data-np-price>{{ section.settings.price }}</span>
-            {%- if default_variant.settings.compare_price != blank -%}
-              <span class="np__price-was" data-np-compare>{{ default_variant.settings.compare_price }}</span>
+            <span class="np__price" data-np-price>{{ display_price }}</span>
+            {%- if show_compare -%}
+              <span class="np__price-was" data-np-compare>{{ display_compare }}</span>
               <span class="np__savings" data-np-savings>SAVE</span>
             {%- else -%}
               <span class="np__price-was" data-np-compare style="display:none"></span>
@@ -169,10 +316,10 @@
         {%- comment -%}7. Primary CTA — full-width, high contrast{%- endcomment -%}
         <div class="np__cta-block np__reveal">
           {%- if section.settings.btn_primary_label != blank -%}
-            <a href="{{ section.settings.btn_primary_url | default: '#' }}" class="np__cta">
+            <a href="{{ display_btn_url | default: '#' }}" class="np__cta">
               <svg class="np__cta-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
               <span data-np-cta-label>{{ section.settings.btn_primary_label }}</span>
-              <span class="np__cta-price" data-np-cta-price>{{ section.settings.price }}</span>
+              <span class="np__cta-price" data-np-cta-price>{{ display_price }}</span>
             </a>
           {%- endif -%}
           {%- if section.settings.cta_micro != blank -%}
@@ -336,6 +483,49 @@
 @keyframes np-float{
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-8px)}
+}
+
+/* Thumbnail gallery strip */
+.np__thumbs{
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+  justify-content:center;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  padding:4px 0;
+}
+.np__thumbs::-webkit-scrollbar{display:none}
+.np__thumb{
+  flex:0 0 56px;
+  width:56px;
+  height:56px;
+  padding:0;
+  border:2px solid var(--np-border);
+  border-radius:10px;
+  background:#fff;
+  cursor:pointer;
+  overflow:hidden;
+  transition:border-color .2s ease,box-shadow .2s ease,transform .15s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.np__thumb:hover{
+  border-color:color-mix(in srgb,var(--np-active) 50%,var(--np-border));
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+.np__thumb--active{
+  border-color:var(--np-active);
+  box-shadow:0 0 0 1px var(--np-active),0 4px 12px color-mix(in srgb,var(--np-active) 12%,transparent);
+}
+.np__thumb-img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  mix-blend-mode:multiply;
 }
 
 /* Coverage pill */
@@ -684,6 +874,8 @@
   .np__trust-item{font-size:11px}
   .np__coverage{font-size:10px;padding:5px 12px}
   .np__cert{font-size:10px;padding:4px 10px}
+  .np__thumbs{gap:6px;margin-top:12px}
+  .np__thumb{flex:0 0 44px;width:44px;height:44px;border-radius:8px}
   .np__reveal{opacity:1;transform:none;transition:none}
 }
 </style>
@@ -700,8 +892,25 @@
     var ctaPriceEl=sec.querySelector('[data-np-cta-price]');
     var coverageWrap=sec.querySelector('[data-np-coverage]');
     var coverageTxt=coverageWrap?coverageWrap.querySelector('.np__coverage-txt'):null;
-    var defaultFrame=sec.querySelector('.np__img-frame--default');
+    var allFrames=sec.querySelectorAll('.np__img-frame');
+    var allThumbs=sec.querySelectorAll('.np__thumb');
     var btns=sec.querySelectorAll('.np__var');
+
+    function showGalleryImage(idx){
+      allFrames.forEach(function(f){f.classList.remove('np__img-frame--active')});
+      allThumbs.forEach(function(t){t.classList.remove('np__thumb--active')});
+      var target=sec.querySelector('[data-gallery-idx="'+idx+'"]');
+      if(target)target.classList.add('np__img-frame--active');
+      var thumb=sec.querySelector('[data-thumb-idx="'+idx+'"]');
+      if(thumb)thumb.classList.add('np__thumb--active');
+    }
+
+    allThumbs.forEach(function(thumb){
+      thumb.addEventListener('click',function(){
+        var idx=thumb.getAttribute('data-thumb-idx');
+        showGalleryImage(idx);
+      });
+    });
 
     btns.forEach(function(btn){
       btn.addEventListener('click',function(){
@@ -731,10 +940,15 @@
           else{if(coverageWrap)coverageWrap.style.opacity='0'}
         }
 
-        sec.querySelectorAll('.np__img-frame--active').forEach(function(f){f.classList.remove('np__img-frame--active')});
-        var targetFrame=hasImg?sec.querySelector('[data-variant-img="'+vid+'"]'):null;
-        if(targetFrame){targetFrame.classList.add('np__img-frame--active')}
-        else if(defaultFrame){defaultFrame.classList.add('np__img-frame--active')}
+        if(hasImg){
+          var variantFrame=sec.querySelector('[data-variant-img="'+vid+'"]');
+          if(variantFrame){
+            var varIdx=variantFrame.getAttribute('data-gallery-idx');
+            showGalleryImage(varIdx);
+          }
+        }else{
+          showGalleryImage('0');
+        }
       });
     });
 
@@ -780,10 +994,13 @@
     { "type": "text", "id": "review_count", "label": "Review Count Text", "default": "2,400+ Reviews" },
     { "type": "range", "id": "review_stars", "label": "Filled Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
 
+    { "type": "header", "content": "─── Product Link ─────────────────" },
+    { "type": "product", "id": "linked_product", "label": "Link a Product", "info": "Syncs title, description, price & images. Manual fields override when filled." },
+
     { "type": "header", "content": "─── Content ──────────────────────" },
-    { "type": "image_picker", "id": "product_image", "label": "Default Product Image", "info": "Transparent PNG recommended (900px wide)." },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Herbishield Concentrated Insecticide" },
-    { "type": "textarea", "id": "description", "label": "Description", "default": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area." },
+    { "type": "image_picker", "id": "product_image", "label": "Default Product Image", "info": "Transparent PNG recommended (900px wide). Overrides linked product's first image." },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Leave blank to use linked product title.", "default": "Herbishield Concentrated Insecticide" },
+    { "type": "textarea", "id": "description", "label": "Description", "info": "Leave blank to use linked product description.", "default": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area." },
     { "type": "text", "id": "cert_text", "label": "Certification Badge", "info": "Floats on studio image. Leave blank to hide.", "default": "100% Organic" },
 
     { "type": "header", "content": "─── Trust & Urgency ──────────────" },
@@ -799,7 +1016,7 @@
     { "type": "color", "id": "popular_tag_color", "label": "Popular Tag Background", "default": "#0d7c5f" },
 
     { "type": "header", "content": "─── Pricing & CTAs ───────────────" },
-    { "type": "text", "id": "price", "label": "Display Price", "default": "€39.99" },
+    { "type": "text", "id": "price", "label": "Display Price", "info": "Leave blank to use linked product price.", "default": "€39.99" },
     { "type": "text", "id": "price_note", "label": "Price Note", "default": "Incl. VAT · Free shipping over €50" },
     { "type": "text", "id": "btn_primary_label", "label": "CTA Label", "default": "Add to Cart" },
     { "type": "url", "id": "btn_primary_url", "label": "CTA URL" },
@@ -847,6 +1064,14 @@
           { "value": "check", "label": "Checkmark" }
         ], "default": "check" },
         { "type": "text", "id": "text", "label": "Benefit Text", "default": "Kills pests on contact" }
+      ]
+    },
+    {
+      "type": "gallery_image",
+      "name": "Gallery Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Additional product image for the gallery." },
+        { "type": "text", "id": "alt_text", "label": "Alt Text", "info": "Describes the image for accessibility." }
       ]
     },
     {

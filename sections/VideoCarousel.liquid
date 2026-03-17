@@ -77,6 +77,8 @@
     --vc-card-bg: #f9fafb;
     --vc-border: #e5e7eb;
     --vc-card-title: #1f2937;
+    --vc-eyebrow-bg: #efe7b0;
+    --vc-eyebrow-txt: #a16207;
   }
 
   #vc-{{ s_id }}.vc {
@@ -96,23 +98,31 @@
   }
 
   #vc-{{ s_id }} .vc__eyebrow {
-    display: inline-block;
-    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--vc-eyebrow-bg);
+    color: var(--vc-eyebrow-txt);
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--vc-accent);
+    line-height: 1;
     margin-bottom: 12px;
   }
 
   #vc-{{ s_id }} .vc__title {
     margin: 0 auto 14px;
     color: var(--vc-heading);
-    font-family: var(--font-body--family);
-    font-weight: 700;
-    line-height: 1.15;
-    font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-size: clamp(1.75rem, 3.8vw, 2.5rem);
     max-width: 600px;
+    text-wrap: balance;
   }
 
   #vc-{{ s_id }} .vc__subtitle {
@@ -298,6 +308,12 @@
   @media screen and (max-width: 767px) {
     #vc-{{ s_id }} .vc__header {
       margin-bottom: 28px;
+    }
+
+    #vc-{{ s_id }} .vc__eyebrow {
+      font-size: 10px;
+      padding: 4px 12px;
+      letter-spacing: 0.1em;
     }
 
     #vc-{{ s_id }} .vc__subtitle {
