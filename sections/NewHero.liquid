@@ -180,7 +180,6 @@
 .ah__wrap{
   flex:1;
   min-width:0;
-  max-width:var(--cmw);
   display:flex;
   flex-direction:column;
   gap:var(--gap);
@@ -191,6 +190,7 @@
     {%- else -%}align-items:flex-start;
   {%- endcase -%}
 }
+.ah__wrap:only-child{max-width:var(--cmw)}
 
 /* ── Portrait image ── */
 .ah__portrait{flex:0 0 var(--pw);max-width:var(--pw);overflow:hidden;border-radius:var(--pir)}
