@@ -35,39 +35,55 @@
     </div>
   {%- endif -%}
 
-  <div class="ah__wrap">
-    {%- if section.settings.badge_text != blank -%}
-      <div class="ah__badge" style="--d:0s">
-        <span>{{ section.settings.badge_text }}</span>
-      </div>
-    {%- endif -%}
+  <div class="ah__grid">
+    <div class="ah__wrap">
+      {%- if section.settings.badge_text != blank -%}
+        <div class="ah__badge" style="--d:0s">
+          <span>{{ section.settings.badge_text }}</span>
+        </div>
+      {%- endif -%}
 
-    {%- if section.settings.heading != blank -%}
-      <h1 class="ah__h1" style="--d:.15s">{{ section.settings.heading }}</h1>
-    {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="ah__h1" style="--d:.15s">{{ section.settings.heading }}</h1>
+      {%- endif -%}
 
-    {%- if section.settings.subtext != blank -%}
-      <p class="ah__sub" style="--d:.3s">{{ section.settings.subtext }}</p>
-    {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="ah__sub" style="--d:.3s">{{ section.settings.subtext }}</p>
+      {%- endif -%}
 
-    {%- if section.settings.btn_primary_label != blank or section.settings.btn_secondary_label != blank -%}
-      <div class="ah__ctas" style="--d:.45s">
-        {%- if section.settings.btn_primary_label != blank -%}
-          <a href="{{ section.settings.btn_primary_url }}" class="ah__btn ah__btn--p">
-            {{- section.settings.btn_primary_label -}}
-            {%- if section.settings.show_btn_icons -%}
-              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
-            {%- endif -%}
-          </a>
-        {%- endif -%}
-        {%- if section.settings.btn_secondary_label != blank -%}
-          <a href="{{ section.settings.btn_secondary_url }}" class="ah__btn ah__btn--s">
-            {{- section.settings.btn_secondary_label -}}
-            {%- if section.settings.show_btn_icons -%}
-              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
-            {%- endif -%}
-          </a>
-        {%- endif -%}
+      {%- if section.settings.btn_primary_label != blank or section.settings.btn_secondary_label != blank -%}
+        <div class="ah__ctas" style="--d:.45s">
+          {%- if section.settings.btn_primary_label != blank -%}
+            <a href="{{ section.settings.btn_primary_url }}" class="ah__btn ah__btn--p">
+              {{- section.settings.btn_primary_label -}}
+              {%- if section.settings.show_btn_icons -%}
+                <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.btn_secondary_label != blank -%}
+            <a href="{{ section.settings.btn_secondary_url }}" class="ah__btn ah__btn--s">
+              {{- section.settings.btn_secondary_label -}}
+              {%- if section.settings.show_btn_icons -%}
+                <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.portrait_image != blank -%}
+      <div class="ah__portrait" style="--d:.6s">
+        {{- section.settings.portrait_image
+            | image_url: width: 800
+            | image_tag:
+              loading: 'eager',
+              widths: '400,520,640,800',
+              sizes: '(max-width: 767px) 0px, 40vw',
+              class: 'ah__pimg',
+              alt: section.settings.portrait_image.alt
+        -}}
       </div>
     {%- endif -%}
   </div>
@@ -106,6 +122,9 @@
   --bbw:{{ section.settings.badge_border_width }}px;
   --bpvp:{{ section.settings.badge_padding_v }}px;
   --bphp:{{ section.settings.badge_padding_h }}px;
+  --ggap:{{ section.settings.grid_gap }}px;
+  --pw:{{ section.settings.portrait_max_width }}%;
+  --pir:{{ section.settings.portrait_border_radius }}px;
 }
 
 /* ── Section shell ── */
@@ -145,23 +164,37 @@
 .ah::after{content:'';position:absolute;inset:0;z-index:2;opacity:{{ section.settings.grain_opacity | divided_by: 100.0 }};pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px}
 {%- endif -%}
 
-/* ── Content wrapper ── */
-.ah__wrap{
+/* ── Grid container ── */
+.ah__grid{
   position:relative;
   z-index:3;
   width:100%;
-  max-width:var(--cmw);
   padding:{{ pt_d }}px {{ ph_d }}px {{ pb_d }}px;
+  display:flex;
+  align-items:center;
+  gap:var(--ggap);
+  {%- if section.settings.desktop_content_side == 'right' -%}flex-direction:row-reverse;{%- endif -%}
+}
+
+/* ── Content column ── */
+.ah__wrap{
+  flex:1;
+  min-width:0;
+  max-width:var(--cmw);
   display:flex;
   flex-direction:column;
   gap:var(--gap);
   text-align:{{ section.settings.content_alignment }};
   {%- case section.settings.content_alignment -%}
-    {%- when 'center' -%}margin:0 auto;align-items:center;
-    {%- when 'right' -%}margin-left:auto;align-items:flex-end;
+    {%- when 'center' -%}align-items:center;
+    {%- when 'right' -%}align-items:flex-end;
     {%- else -%}align-items:flex-start;
   {%- endcase -%}
 }
+
+/* ── Portrait image ── */
+.ah__portrait{flex:0 0 var(--pw);max-width:var(--pw);overflow:hidden;border-radius:var(--pir)}
+.ah__pimg{width:100%;height:auto;aspect-ratio:{{ section.settings.portrait_aspect_ratio }};object-fit:cover;display:block;border-radius:var(--pir)}
 
 /* ── Badge ── */
 .ah__badge{display:inline-flex;width:fit-content;border:var(--bbw) solid var(--cbb);border-radius:999px;padding:var(--bpvp) var(--bphp);background:{{ section.settings.badge_bg_color }}}
@@ -195,7 +228,7 @@
 
 /* ── Animations ── */
 {%- if section.settings.enable_animations -%}
-.ah__badge,.ah__h1,.ah__sub,.ah__ctas{opacity:0;transform:translateY(24px);animation:ah-up .65s ease forwards;animation-delay:var(--d,0s)}
+.ah__badge,.ah__h1,.ah__sub,.ah__ctas,.ah__portrait{opacity:0;transform:translateY(24px);animation:ah-up .65s ease forwards;animation-delay:var(--d,0s)}
 @keyframes ah-up{to{opacity:1;transform:translateY(0)}}
 {%- endif -%}
 
@@ -211,15 +244,21 @@
       {%- else -%}min-height:{{ section.settings.section_min_height_mobile }}px;
     {%- endcase -%}
   }
-  .ah__wrap{padding:{{ pt_m }}px {{ ph_m }}px {{ pb_m }}px}
+  .ah__grid{padding:{{ pt_m }}px {{ ph_m }}px {{ pb_m }}px;flex-direction:column}
+  .ah__portrait{display:none}
+  .ah__wrap{max-width:100%}
   .ah__h1{font-size:{{ section.settings.heading_font_size_mobile }}px}
   .ah__sub{font-size:{{ section.settings.subtext_font_size_mobile }}px}
   .ah__badge span{font-size:{{ section.settings.badge_font_size_mobile }}px}
   .ah__btn{font-size:{{ section.settings.btn_font_size_mobile }}px}
-  {%- if section.settings.mobile_center_content -%}
-  .ah__wrap{align-items:center;text-align:center}
-  .ah__ctas{justify-content:center}
-  {%- endif -%}
+  {%- case section.settings.mobile_content_alignment -%}
+    {%- when 'center' -%}
+    .ah__wrap{align-items:center;text-align:center}
+    .ah__ctas{justify-content:center}
+    {%- when 'right' -%}
+    .ah__wrap{align-items:flex-end;text-align:right}
+    .ah__ctas{justify-content:flex-end}
+  {%- endcase -%}
   {%- if section.settings.mobile_stack_buttons -%}
   .ah__ctas{flex-direction:column;width:100%}
   .ah__btn{width:100%;justify-content:center}
@@ -344,6 +383,41 @@
       "label": "Ken Burns Duration (seconds)",
       "min": 6, "max": 30, "step": 1,
       "default": 18
+    },
+
+    { "type": "header", "content": "─── Portrait Image ───────────────" },
+    {
+      "type": "image_picker",
+      "id": "portrait_image",
+      "label": "Portrait Image",
+      "info": "Appears beside the content on desktop. Hidden on mobile. Recommended: 800×1000px or larger"
+    },
+    {
+      "type": "select",
+      "id": "portrait_aspect_ratio",
+      "label": "Portrait Aspect Ratio",
+      "options": [
+        { "value": "3/4",  "label": "3:4" },
+        { "value": "2/3",  "label": "2:3" },
+        { "value": "4/5",  "label": "4:5" },
+        { "value": "9/16", "label": "9:16" }
+      ],
+      "default": "3/4"
+    },
+    {
+      "type": "range",
+      "id": "portrait_border_radius",
+      "label": "Portrait Border Radius (px)",
+      "min": 0, "max": 40, "step": 2,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "portrait_max_width",
+      "label": "Portrait Max Width (%)",
+      "min": 20, "max": 60, "step": 5,
+      "default": 40,
+      "info": "Percentage of the grid width on desktop"
     },
 
     { "type": "header", "content": "─── Padding — Desktop ────────────" },
@@ -624,8 +698,27 @@
     { "type": "header", "content": "─── Layout & Alignment ───────────" },
     {
       "type": "select",
+      "id": "desktop_content_side",
+      "label": "Desktop Content Side",
+      "info": "Which side the text content appears on desktop",
+      "options": [
+        { "value": "left",  "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid Gap (px)",
+      "min": 16, "max": 80, "step": 4,
+      "default": 40,
+      "info": "Gap between content and portrait image"
+    },
+    {
+      "type": "select",
       "id": "content_alignment",
-      "label": "Content Alignment",
+      "label": "Content Text Alignment",
       "options": [
         { "value": "left",   "label": "Left" },
         { "value": "center", "label": "Center" },
@@ -668,10 +761,15 @@
 
     { "type": "header", "content": "─── Mobile Behaviour ─────────────" },
     {
-      "type": "checkbox",
-      "id": "mobile_center_content",
-      "label": "Center Content on Mobile",
-      "default": false
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "label": "Mobile Content Alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
     },
     {
       "type": "checkbox",
