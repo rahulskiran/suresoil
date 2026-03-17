@@ -368,6 +368,19 @@
   </div>
 </section>
 
+{%- liquid
+  assign heading_font = section.settings.heading_font | default: 'Inter'
+  assign desc_font = section.settings.desc_font | default: 'Inter'
+  assign gf_families = heading_font | replace: ' ', '+'
+  unless heading_font == desc_font
+    assign desc_family = desc_font | replace: ' ', '+'
+    assign gf_families = gf_families | append: '&family=' | append: desc_family
+  endunless
+-%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family={{ gf_families }}:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 #np-{{ s_id }}{
   --np-bg:{{ section.settings.bg_color }};
@@ -389,6 +402,8 @@
   --np-btn2-txt:{{ section.settings.btn_secondary_text | default: '#1a4d1e' }};
   --np-trust-c:{{ section.settings.trust_color | default: '#0d7c5f' }};
   --np-star:{{ section.settings.star_color | default: '#f59e0b' }};
+  --np-heading-font:'{{ section.settings.heading_font | default: "Inter" }}', sans-serif;
+  --np-desc-font:'{{ section.settings.desc_font | default: "Inter" }}', sans-serif;
 }
 
 /* ══════════════════════════════════════
@@ -580,6 +595,7 @@
 
 /* 2. Heading */
 .np__heading{
+  font-family:var(--np-heading-font);
   font-size:clamp(1.65rem,3.4vw,{{ section.settings.heading_size }}px);
   font-weight:800;
   line-height:1.08;
@@ -591,6 +607,7 @@
 
 /* 3. Description */
 .np__desc{
+  font-family:var(--np-desc-font);
   font-size:{{ section.settings.desc_size }}px;
   line-height:1.65;
   color:var(--np-desc);
@@ -1044,6 +1061,30 @@
     { "type": "range", "id": "padding_h", "label": "Padding Horizontal (px)", "min": 16, "max": 80, "step": 4, "default": 24 },
 
     { "type": "header", "content": "─── Typography ───────────────────" },
+    { "type": "select", "id": "heading_font", "label": "Heading Font Family", "options": [
+      { "value": "Inter", "label": "Inter" },
+      { "value": "Poppins", "label": "Poppins" },
+      { "value": "Montserrat", "label": "Montserrat" },
+      { "value": "Playfair Display", "label": "Playfair Display" },
+      { "value": "Raleway", "label": "Raleway" },
+      { "value": "Lato", "label": "Lato" },
+      { "value": "Roboto", "label": "Roboto" },
+      { "value": "Open Sans", "label": "Open Sans" },
+      { "value": "Outfit", "label": "Outfit" },
+      { "value": "DM Sans", "label": "DM Sans" }
+    ], "default": "Inter" },
+    { "type": "select", "id": "desc_font", "label": "Description Font Family", "options": [
+      { "value": "Inter", "label": "Inter" },
+      { "value": "Poppins", "label": "Poppins" },
+      { "value": "Montserrat", "label": "Montserrat" },
+      { "value": "Lato", "label": "Lato" },
+      { "value": "Raleway", "label": "Raleway" },
+      { "value": "Roboto", "label": "Roboto" },
+      { "value": "Open Sans", "label": "Open Sans" },
+      { "value": "Outfit", "label": "Outfit" },
+      { "value": "DM Sans", "label": "DM Sans" },
+      { "value": "Source Sans Pro", "label": "Source Sans Pro" }
+    ], "default": "Inter" },
     { "type": "range", "id": "heading_size", "label": "Heading — Desktop (px)", "min": 28, "max": 72, "step": 2, "default": 40 },
     { "type": "range", "id": "heading_size_mobile", "label": "Heading — Mobile (px)", "min": 24, "max": 48, "step": 2, "default": 28 },
     { "type": "range", "id": "desc_size", "label": "Description (px)", "min": 14, "max": 20, "step": 1, "default": 15 },
