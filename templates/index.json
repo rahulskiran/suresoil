@@ -13,7 +13,7 @@
       "type": "NewHero",
       "name": "Agri Hero",
       "settings": {
-        "layout_mode": "16-9",
+        "layout_mode": "fixed",
         "section_min_height": 700,
         "section_min_height_mobile": 520,
         "image_focal_point": "center center",
