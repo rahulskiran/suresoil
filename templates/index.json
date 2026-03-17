@@ -125,6 +125,149 @@
         "leaf_opacity": 20
       }
     },
+    "testimonial_m7Kq3x": {
+      "type": "testimonial",
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "This product worked wonders on my dandelions! My garden has never looked better. Highly recommend!",
+            "name": "Jane D.",
+            "location": "Portland, OR"
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "After just one application, the weeds were completely gone. Safe for my pets and easy to use. Five stars!",
+            "name": "Mark S.",
+            "location": "Austin, TX"
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "I've tried so many products and nothing compares. It actually works without killing my lawn. Amazing results.",
+            "name": "Lisa W.",
+            "location": "Denver, CO"
+          }
+        },
+        "review_4": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Our entire crop area was struggling with pests. One treatment and we saw results within days. Incredible.",
+            "name": "Thomas R.",
+            "location": "Bordeaux, FR"
+          }
+        },
+        "review_5": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Finally a natural solution that actually delivers. My organic certification was never at risk. Will reorder.",
+            "name": "Anna K.",
+            "location": "Munich, DE"
+          }
+        },
+        "review_6": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 4,
+            "text": "Great product for everyday garden use. My flower beds look pristine. Shipping was fast too!",
+            "name": "Carlos M.",
+            "location": "Miami, FL"
+          }
+        },
+        "review_7": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Professional-grade results at a consumer price. We use it across our entire greenhouse operation.",
+            "name": "Sarah L.",
+            "location": "Kent, UK"
+          }
+        },
+        "review_8": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "The concentrated formula is so economical. One bottle lasted the whole season for our 200m² garden.",
+            "name": "Peter H.",
+            "location": "Vienna, AT"
+          }
+        },
+        "review_9": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Removed stubborn bindweed that nothing else could touch. My neighbour now uses it too!",
+            "name": "Emma B.",
+            "location": "Dublin, IE"
+          }
+        },
+        "review_10": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Works brilliantly on gravel paths and patios. No more hours of hand weeding. Life saver.",
+            "name": "David N.",
+            "location": "Oslo, NO"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6",
+        "review_7",
+        "review_8",
+        "review_9",
+        "review_10"
+      ],
+      "name": "Testimonial Marquee",
+      "settings": {
+        "bg_color": "#f0ead2",
+        "heading_color": "#2d4a1e",
+        "subtext_color": "#4b5e3c",
+        "card_bg": "#faf8f0",
+        "card_border": "#e8e2cc",
+        "star_color": "#d4a017",
+        "star_empty_color": "#d5d0c0",
+        "text_color": "#3a3a2e",
+        "name_color": "#2d4a1e",
+        "location_color": "#7a8a6a",
+        "avatar_bg": "#2d6b2d",
+        "leaf_color": "#4a8c3f",
+        "leaf_accent": "#c9a227",
+        "icon_size": 52,
+        "heading": "Real Results from Real Gardeners",
+        "subtext": "Read what our happy customers are saying about GreenGuard Weed Killers.",
+        "heading_size": 40,
+        "heading_size_mobile": 26,
+        "sub_size": 16,
+        "sub_size_mobile": 14,
+        "text_size": 15,
+        "star_size": 18,
+        "card_width": 280,
+        "card_width_mobile": 250,
+        "card_padding": 22,
+        "card_radius": 14,
+        "card_gap": 16,
+        "header_gap": 10,
+        "rows_gap": 36,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "padding_h": 24,
+        "speed": 35
+      }
+    },
     "new_product_URMeYP": {
       "type": "NewProduct",
       "blocks": {
@@ -244,6 +387,7 @@
   "order": [
     "new_hero_44TX4j",
     "trust_indicator_TC7jed",
-    "new_product_URMeYP"
+    "new_product_URMeYP",
+    "testimonial_m7Kq3x"
   ]
 }

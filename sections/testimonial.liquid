@@ -1,0 +1,582 @@
+{% comment %}Testimonial Marquee — sections/testimonial.liquid{% endcomment %}
+
+{%- liquid
+  assign s_id  = section.id
+  assign blocks = section.blocks
+  assign half   = blocks.size | divided_by: 2
+-%}
+
+<section class="tm" id="tm-{{ s_id }}">
+
+  {%- comment -%}── Header ──{%- endcomment -%}
+  <div class="tm__header">
+    <div class="tm__icon" aria-hidden="true">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M30 38C30 38 24 28 18 22C14 18 8 16 8 16C8 16 16 18 22 22C28 26 30 38 30 38Z" fill="{{ section.settings.leaf_color }}"/>
+        <path d="M30 38C30 38 36 28 42 22C46 18 52 16 52 16C52 16 44 18 38 22C32 26 30 38 30 38Z" fill="{{ section.settings.leaf_color }}"/>
+        <path d="M30 38C30 38 28 26 24 18C21 12 16 6 16 6C16 6 22 12 26 18C30 24 30 38 30 38Z" fill="{{ section.settings.leaf_accent }}"/>
+        <path d="M30 38C30 38 32 26 36 18C39 12 44 6 44 6C44 6 38 12 34 18C30 24 30 38 30 38Z" fill="{{ section.settings.leaf_accent }}"/>
+        <line x1="30" y1="38" x2="30" y2="56" stroke="{{ section.settings.leaf_color }}" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="tm__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtext != blank -%}
+      <p class="tm__sub">{{ section.settings.subtext }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%}── Row 1 ──{%- endcomment -%}
+  <div class="tm__track-wrap">
+    <div class="tm__track tm__track--1" style="--speed:{{ section.settings.speed }}s">
+      {%- for block in blocks -%}
+        {%- if forloop.index0 < half or blocks.size < 4 -%}
+          <div class="tm__card" {{ block.shopify_attributes }}>
+            <div class="tm__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                <svg class="tm__star{% if i > block.settings.stars %} tm__star--empty{% endif %}" viewBox="0 0 20 20"><path d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.26 5.06 16.7l.94-5.5-4-3.9 5.53-.8L10 1.5z"/></svg>
+              {%- endfor -%}
+            </div>
+            <p class="tm__text">{{ block.settings.text }}</p>
+            <div class="tm__author">
+              {%- if block.settings.avatar != blank -%}
+                <span class="tm__avatar">
+                  {{- block.settings.avatar | image_url: width: 80 | image_tag: loading: 'lazy', class: 'tm__avatar-img', alt: block.settings.name -}}
+                </span>
+              {%- else -%}
+                <span class="tm__avatar tm__avatar--placeholder">
+                  <span>{{ block.settings.name | slice: 0 }}</span>
+                </span>
+              {%- endif -%}
+              <div class="tm__meta">
+                <span class="tm__name">{{ block.settings.name }}</span>
+                {%- if block.settings.location != blank -%}
+                  <span class="tm__location">{{ block.settings.location }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- comment -%}── Row 2 ──{%- endcomment -%}
+  {%- if blocks.size >= 4 -%}
+    <div class="tm__track-wrap">
+      <div class="tm__track tm__track--2" style="--speed:{{ section.settings.speed }}s">
+        {%- for block in blocks -%}
+          {%- if forloop.index0 >= half -%}
+            <div class="tm__card" {{ block.shopify_attributes }}>
+              <div class="tm__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+                {%- for i in (1..5) -%}
+                  <svg class="tm__star{% if i > block.settings.stars %} tm__star--empty{% endif %}" viewBox="0 0 20 20"><path d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.26 5.06 16.7l.94-5.5-4-3.9 5.53-.8L10 1.5z"/></svg>
+                {%- endfor -%}
+              </div>
+              <p class="tm__text">{{ block.settings.text }}</p>
+              <div class="tm__author">
+                {%- if block.settings.avatar != blank -%}
+                  <span class="tm__avatar">
+                    {{- block.settings.avatar | image_url: width: 80 | image_tag: loading: 'lazy', class: 'tm__avatar-img', alt: block.settings.name -}}
+                  </span>
+                {%- else -%}
+                  <span class="tm__avatar tm__avatar--placeholder">
+                    <span>{{ block.settings.name | slice: 0 }}</span>
+                  </span>
+                {%- endif -%}
+                <div class="tm__meta">
+                  <span class="tm__name">{{ block.settings.name }}</span>
+                  {%- if block.settings.location != blank -%}
+                    <span class="tm__location">{{ block.settings.location }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+</section>
+
+<style>
+#tm-{{ s_id }}{
+  --tm-bg:{{ section.settings.bg_color }};
+  --tm-heading:{{ section.settings.heading_color }};
+  --tm-sub:{{ section.settings.subtext_color }};
+  --tm-card-bg:{{ section.settings.card_bg }};
+  --tm-card-border:{{ section.settings.card_border }};
+  --tm-star:{{ section.settings.star_color }};
+  --tm-star-empty:{{ section.settings.star_empty_color }};
+  --tm-text:{{ section.settings.text_color }};
+  --tm-name:{{ section.settings.name_color }};
+  --tm-loc:{{ section.settings.location_color }};
+  --tm-avatar-bg:{{ section.settings.avatar_bg }};
+  --tm-avatar-txt:#fff;
+}
+
+.tm{
+  background:var(--tm-bg);
+  padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  overflow:hidden;
+}
+
+/* ── Header ── */
+.tm__header{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 {{ section.settings.padding_h }}px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:{{ section.settings.header_gap }}px;
+  margin-bottom:{{ section.settings.rows_gap }}px;
+}
+
+.tm__icon svg{
+  width:{{ section.settings.icon_size }}px;
+  height:{{ section.settings.icon_size }}px;
+}
+
+.tm__heading{
+  font-size:{{ section.settings.heading_size }}px;
+  font-weight:800;
+  font-style:italic;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  line-height:1.15;
+  color:var(--tm-heading);
+  margin:0;
+}
+
+.tm__sub{
+  font-size:{{ section.settings.sub_size }}px;
+  line-height:1.55;
+  color:var(--tm-sub);
+  margin:0;
+  max-width:560px;
+}
+
+/* ── Track / Marquee ── */
+.tm__track-wrap{
+  overflow:hidden;
+  width:100%;
+  -webkit-mask-image:linear-gradient(to right,transparent,black 5%,black 95%,transparent);
+  mask-image:linear-gradient(to right,transparent,black 5%,black 95%,transparent);
+}
+.tm__track-wrap + .tm__track-wrap{
+  margin-top:{{ section.settings.card_gap }}px;
+}
+
+.tm__track{
+  display:flex;
+  gap:{{ section.settings.card_gap }}px;
+  width:max-content;
+  animation:tm-scroll var(--speed) linear infinite;
+}
+.tm__track--2{
+  animation-direction:reverse;
+}
+
+@keyframes tm-scroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+.tm__track:hover{
+  animation-play-state:paused;
+}
+
+/* ── Card ── */
+.tm__card{
+  flex-shrink:0;
+  width:{{ section.settings.card_width }}px;
+  background:var(--tm-card-bg);
+  border:1px solid var(--tm-card-border);
+  border-radius:{{ section.settings.card_radius }}px;
+  padding:{{ section.settings.card_padding }}px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* ── Stars ── */
+.tm__stars{display:flex;gap:3px}
+.tm__star{
+  width:{{ section.settings.star_size }}px;
+  height:{{ section.settings.star_size }}px;
+  fill:var(--tm-star);
+}
+.tm__star--empty{fill:var(--tm-star-empty)}
+
+/* ── Text ── */
+.tm__text{
+  margin:0;
+  font-size:{{ section.settings.text_size }}px;
+  line-height:1.55;
+  color:var(--tm-text);
+  flex:1;
+}
+
+/* ── Author ── */
+.tm__author{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:auto;
+}
+
+.tm__avatar{
+  width:36px;height:36px;
+  border-radius:50%;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.tm__avatar-img{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+}
+.tm__avatar--placeholder{
+  background:var(--tm-avatar-bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.tm__avatar--placeholder span{
+  font-size:14px;font-weight:700;
+  color:var(--tm-avatar-txt);
+  text-transform:uppercase;
+}
+
+.tm__meta{display:flex;flex-direction:column;gap:1px}
+.tm__name{font-size:14px;font-weight:700;color:var(--tm-name)}
+.tm__location{font-size:12px;color:var(--tm-loc)}
+
+/* ── Mobile ── */
+@media(max-width:767px){
+  .tm__heading{font-size:{{ section.settings.heading_size_mobile }}px}
+  .tm__sub{font-size:{{ section.settings.sub_size_mobile }}px}
+  .tm__card{width:{{ section.settings.card_width_mobile }}px}
+}
+</style>
+
+<script>
+(function(){
+  function initMarquee(){
+    var tracks=document.querySelectorAll('#tm-{{ s_id }} .tm__track');
+    tracks.forEach(function(track){
+      if(track.dataset.cloned) return;
+      var items=track.innerHTML;
+      track.innerHTML=items+items;
+      track.dataset.cloned='true';
+    });
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initMarquee);
+  }else{
+    initMarquee();
+  }
+  document.addEventListener('shopify:section:load',function(e){
+    if(e.detail.sectionId==='{{ s_id }}') initMarquee();
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Testimonial Marquee",
+  "tag": "section",
+  "class": "testimonial-section",
+  "settings": [
+
+    { "type": "header", "content": "─── Colors ───────────────────────" },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#f0ead2"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#2d4a1e"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext Color",
+      "default": "#4b5e3c"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "#faf8f0"
+    },
+    {
+      "type": "color",
+      "id": "card_border",
+      "label": "Card Border",
+      "default": "#e8e2cc"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#d4a017"
+    },
+    {
+      "type": "color",
+      "id": "star_empty_color",
+      "label": "Empty Star Color",
+      "default": "#d5d0c0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Review Text Color",
+      "default": "#3a3a2e"
+    },
+    {
+      "type": "color",
+      "id": "name_color",
+      "label": "Name Color",
+      "default": "#2d4a1e"
+    },
+    {
+      "type": "color",
+      "id": "location_color",
+      "label": "Location Color",
+      "default": "#7a8a6a"
+    },
+    {
+      "type": "color",
+      "id": "avatar_bg",
+      "label": "Default Avatar Background",
+      "default": "#2d6b2d"
+    },
+
+    { "type": "header", "content": "─── Leaf Icon ────────────────────" },
+    {
+      "type": "color",
+      "id": "leaf_color",
+      "label": "Leaf Color",
+      "default": "#4a8c3f"
+    },
+    {
+      "type": "color",
+      "id": "leaf_accent",
+      "label": "Leaf Accent Color",
+      "default": "#c9a227"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon Size (px)",
+      "min": 30, "max": 80, "step": 2,
+      "default": 52
+    },
+
+    { "type": "header", "content": "─── Content ──────────────────────" },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Real Results from Real Gardeners"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Read what our happy customers are saying about GreenGuard Weed Killers."
+    },
+
+    { "type": "header", "content": "─── Typography ───────────────────" },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading — Desktop (px)",
+      "min": 24, "max": 64, "step": 2,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading — Mobile (px)",
+      "min": 20, "max": 44, "step": 2,
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "Subtext — Desktop (px)",
+      "min": 13, "max": 22, "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "Subtext — Mobile (px)",
+      "min": 13, "max": 20, "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Review Text Size (px)",
+      "min": 13, "max": 18, "step": 1,
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Star Size (px)",
+      "min": 14, "max": 24, "step": 1,
+      "default": 18
+    },
+
+    { "type": "header", "content": "─── Layout ───────────────────────" },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card Width — Desktop (px)",
+      "min": 200, "max": 360, "step": 10,
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "label": "Card Width — Mobile (px)",
+      "min": 200, "max": 320, "step": 10,
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card Padding (px)",
+      "min": 12, "max": 32, "step": 2,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card Border Radius (px)",
+      "min": 0, "max": 24, "step": 2,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap Between Cards (px)",
+      "min": 8, "max": 32, "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "header_gap",
+      "label": "Header Content Gap (px)",
+      "min": 4, "max": 24, "step": 2,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "rows_gap",
+      "label": "Gap Between Header and Cards (px)",
+      "min": 16, "max": 60, "step": 4,
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (px)",
+      "min": 0, "max": 120, "step": 4,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (px)",
+      "min": 0, "max": 120, "step": 4,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_h",
+      "label": "Header Horizontal Padding (px)",
+      "min": 16, "max": 80, "step": 4,
+      "default": 24
+    },
+
+    { "type": "header", "content": "─── Animation ────────────────────" },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll Speed (seconds per cycle)",
+      "min": 15, "max": 80, "step": 5,
+      "default": 35
+    }
+
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Star Rating",
+          "min": 1, "max": 5, "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review Text",
+          "default": "This product worked wonders on my dandelions! My garden has never looked better. Highly recommend!"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar Image",
+          "info": "Optional. A placeholder initial will be shown if empty."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Jane D."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "Portland, OR"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonial Marquee",
+      "category": "Social Proof",
+      "blocks": [
+        { "type": "testimonial", "settings": { "stars": 5, "text": "This product worked wonders on my dandelions! My garden has never looked better. Highly recommend!", "name": "Jane D.", "location": "Portland, OR" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "After just one application, the weeds were completely gone. Safe for my pets and easy to use. Five stars!", "name": "Mark S.", "location": "Austin, TX" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "I've tried so many products and nothing compares. It actually works without killing my lawn. Amazing results.", "name": "Lisa W.", "location": "Denver, CO" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "Our entire crop area was struggling with pests. One treatment and we saw results within days. Incredible.", "name": "Thomas R.", "location": "Bordeaux, FR" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "Finally a natural solution that actually delivers. My organic certification was never at risk. Will reorder.", "name": "Anna K.", "location": "Munich, DE" } },
+        { "type": "testimonial", "settings": { "stars": 4, "text": "Great product for everyday garden use. My flower beds look pristine. Shipping was fast too!", "name": "Carlos M.", "location": "Miami, FL" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "Professional-grade results at a consumer price. We use it across our entire greenhouse operation.", "name": "Sarah L.", "location": "Kent, UK" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "The concentrated formula is so economical. One bottle lasted the whole season for our 200m² garden.", "name": "Peter H.", "location": "Vienna, AT" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "Removed stubborn bindweed that nothing else could touch. My neighbour now uses it too!", "name": "Emma B.", "location": "Dublin, IE" } },
+        { "type": "testimonial", "settings": { "stars": 5, "text": "Works brilliantly on gravel paths and patios. No more hours of hand weeding. Life saver.", "name": "David N.", "location": "Oslo, NO" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
