@@ -131,6 +131,7 @@
         "card_1": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_4ovj1r4ovj1r4ovj.png",
             "title": "Concentrated Formula",
             "text": "An emulsifiable concentrate designed for efficient plant care support."
           }
@@ -138,6 +139,7 @@
         "card_2": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_50tb4650tb4650tb.png",
             "title": "Reliable Performance",
             "text": "Designed to support consistent plant health when used as directed."
           }
@@ -145,6 +147,7 @@
         "card_3": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_utkyycutkyycutky.png",
             "title": "Supports Plant Vitality",
             "text": "Helps manage insect-related plant stress to maintain healthy growth conditions."
           }
@@ -152,6 +155,7 @@
         "card_4": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_ly10c7ly10c7ly10.png",
             "title": "Healthier Leaves & Stronger Growth",
             "text": "Helps maintain leaf strength and vitality across different types of crops."
           }
@@ -175,6 +179,7 @@
         "badge_text": "#ffffff",
         "heading": "Why Herbishield Works",
         "subtext": "",
+        "hero_image": "shopify://shop_images/Gemini_Generated_Image_mzgao0mzgao0mzga.png",
         "hero_badge": "HERBISHIELD FORMULA",
         "hero_heading": "Professional-grade protection that keeps your crops healthy and thriving all season long.",
         "heading_size": 36,
