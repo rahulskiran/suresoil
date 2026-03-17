@@ -1,4 +1,4 @@
-{% comment %}Product Showcase — sections/NewProduct.liquid v2.0{% endcomment %}
+{% comment %}Product Showcase — sections/NewProduct.liquid v3.0 — CRO-optimized{% endcomment %}
 
 {%- liquid
   assign s_id = section.id
@@ -20,11 +20,18 @@
   <div class="np__wrap">
     <div class="np__grid">
 
-      {%- comment -%}── Left: Studio image container ──{%- endcomment -%}
-      <div class="np__img-col np__reveal">
+      {%- comment -%}── Left: Studio product display ──{%- endcomment -%}
+      <div class="np__media np__reveal">
         <div class="np__studio">
+
+          {%- if section.settings.cert_text != blank -%}
+            <div class="np__cert">
+              <svg class="np__cert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              <span>{{ section.settings.cert_text }}</span>
+            </div>
+          {%- endif -%}
+
           <div class="np__img-stage">
-            {%- comment -%}Default section image (fallback){%- endcomment -%}
             <div class="np__img-frame np__img-frame--default{% if default_variant == nil or default_variant.settings.image == blank %} np__img-frame--active{% endif %}">
               {%- if section.settings.product_image != blank -%}
                 {{- section.settings.product_image
@@ -40,8 +47,6 @@
                 {{ 'product-1' | placeholder_svg_tag: 'np__product-img np__product-img--ph' }}
               {%- endif -%}
             </div>
-
-            {%- comment -%}Per-variant images{%- endcomment -%}
             {%- for block in variants -%}
               {%- if block.settings.image != blank -%}
                 <div class="np__img-frame{% if default_variant.id == block.id %} np__img-frame--active{% endif %}" data-variant-img="{{ block.id }}">
@@ -59,66 +64,66 @@
             {%- endfor -%}
           </div>
 
-          {%- comment -%}Floating coverage badge{%- endcomment -%}
           {%- assign show_coverage = false -%}
           {%- for v in variants -%}
             {%- if v.settings.coverage != blank -%}{%- assign show_coverage = true -%}{%- break -%}{%- endif -%}
           {%- endfor -%}
           {%- if show_coverage -%}
             <div class="np__coverage" data-np-coverage>
-              <svg class="np__coverage-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg>
+              <svg class="np__coverage-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg>
               <span class="np__coverage-txt">{{ default_variant.settings.coverage | default: '' }}</span>
             </div>
           {%- endif -%}
         </div>
       </div>
 
-      {%- comment -%}── Right: Product info ──{%- endcomment -%}
-      <div class="np__info-col">
+      {%- comment -%}── Right: CRO-optimized info column ──{%- endcomment -%}
+      <div class="np__info">
 
-        {%- if section.settings.badge_text != blank -%}
-          <div class="np__badge np__reveal">
-            <svg class="np__badge-ico" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <span>{{ section.settings.badge_text }}</span>
+        {%- comment -%}1. Social proof — first thing the eye sees{%- endcomment -%}
+        {%- if section.settings.review_rating != blank -%}
+          <div class="np__proof np__reveal">
+            <div class="np__stars">
+              {%- assign star_count = section.settings.review_stars | default: 5 -%}
+              {%- for i in (1..5) -%}
+                <svg class="np__star{% if i > star_count %} np__star--empty{% endif %}" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              {%- endfor -%}
+            </div>
+            <span class="np__proof-rating">{{ section.settings.review_rating }}</span>
+            <span class="np__proof-sep">·</span>
+            <span class="np__proof-count">{{ section.settings.review_count }}</span>
           </div>
         {%- endif -%}
 
+        {%- comment -%}2. Product name — clear, dominant{%- endcomment -%}
         {%- if section.settings.heading != blank -%}
           <h2 class="np__heading np__reveal">{{ section.settings.heading }}</h2>
         {%- endif -%}
 
+        {%- comment -%}3. One-liner value proposition{%- endcomment -%}
         {%- if section.settings.description != blank -%}
           <p class="np__desc np__reveal">{{ section.settings.description }}</p>
         {%- endif -%}
 
+        {%- comment -%}4. Benefit chips — scannable, compact{%- endcomment -%}
         {%- if features.size > 0 -%}
-          <ul class="np__features np__reveal">
+          <div class="np__chips np__reveal">
             {%- for block in features -%}
-              <li class="np__feat" {{ block.shopify_attributes }}>
-                <span class="np__feat-icon">
-                  {%- case block.settings.icon -%}
-                    {%- when 'shield' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-                    {%- when 'leaf' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-3.8 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-                    {%- when 'flask' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M12 3v7.4a2 2 0 0 1-.5 1.3L5 19a2 2 0 0 0 1.5 3h11a2 2 0 0 0 1.5-3l-6.5-7.3a2 2 0 0 1-.5-1.3V3"/></svg>
-                    {%- when 'droplet' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
-                    {%- else -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-                  {%- endcase -%}
-                </span>
-                <span class="np__feat-text">{{ block.settings.text }}</span>
-              </li>
+              <span class="np__chip" {{ block.shopify_attributes }}>
+                <svg class="np__chip-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                {{ block.settings.text }}
+              </span>
             {%- endfor -%}
-          </ul>
+          </div>
         {%- endif -%}
 
+        <hr class="np__divider np__reveal">
+
+        {%- comment -%}5. Variant selector — shows coverage per size{%- endcomment -%}
         {%- if variants.size > 0 -%}
           <div class="np__variants np__reveal">
             <p class="np__variants-label">{{ section.settings.size_label }}</p>
-            <div class="np__variants-row">
+            <div class="np__var-grid">
               {%- for block in variants -%}
                 <button
                   class="np__var{% if block.settings.selected %} np__var--active{% endif %}"
@@ -133,7 +138,10 @@
                   {%- if block.settings.popular_tag != blank -%}
                     <span class="np__var-tag">{{ block.settings.popular_tag }}</span>
                   {%- endif -%}
-                  <span class="np__var-name">{{ block.settings.label }}</span>
+                  <span class="np__var-size">{{ block.settings.label }}</span>
+                  {%- if block.settings.coverage != blank -%}
+                    <span class="np__var-cov">{{ block.settings.coverage }}</span>
+                  {%- endif -%}
                   <span class="np__var-price">{{ block.settings.price }}</span>
                 </button>
               {%- endfor -%}
@@ -141,13 +149,16 @@
           </div>
         {%- endif -%}
 
+        {%- comment -%}6. Price anchoring block{%- endcomment -%}
         <div class="np__price-block np__reveal">
           <div class="np__price-row">
             <span class="np__price" data-np-price>{{ section.settings.price }}</span>
             {%- if default_variant.settings.compare_price != blank -%}
               <span class="np__price-was" data-np-compare>{{ default_variant.settings.compare_price }}</span>
+              <span class="np__savings" data-np-savings>SAVE</span>
             {%- else -%}
               <span class="np__price-was" data-np-compare style="display:none"></span>
+              <span class="np__savings" data-np-savings style="display:none">SAVE</span>
             {%- endif -%}
           </div>
           {%- if section.settings.price_note != blank -%}
@@ -155,6 +166,27 @@
           {%- endif -%}
         </div>
 
+        {%- comment -%}7. Primary CTA — full-width, high contrast{%- endcomment -%}
+        <div class="np__cta-block np__reveal">
+          {%- if section.settings.btn_primary_label != blank -%}
+            <a href="{{ section.settings.btn_primary_url | default: '#' }}" class="np__cta">
+              <svg class="np__cta-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+              <span data-np-cta-label>{{ section.settings.btn_primary_label }}</span>
+              <span class="np__cta-price" data-np-cta-price>{{ section.settings.price }}</span>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.cta_micro != blank -%}
+            <p class="np__cta-micro">{{ section.settings.cta_micro }}</p>
+          {%- endif -%}
+          {%- if section.settings.btn_secondary_label != blank -%}
+            <a href="{{ section.settings.btn_secondary_url | default: '#' }}" class="np__link">
+              {{ section.settings.btn_secondary_label }}
+              <svg class="np__link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%}8. Trust strip — reduces purchase anxiety{%- endcomment -%}
         <div class="np__trust np__reveal">
           {%- if section.settings.trust_1 != blank -%}
             <div class="np__trust-item">
@@ -176,20 +208,7 @@
           {%- endif -%}
         </div>
 
-        <div class="np__ctas np__reveal">
-          {%- if section.settings.btn_primary_label != blank -%}
-            <a href="{{ section.settings.btn_primary_url | default: '#' }}" class="np__btn np__btn--p">
-              <svg class="np__btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-              {{ section.settings.btn_primary_label }}
-            </a>
-          {%- endif -%}
-          {%- if section.settings.btn_secondary_label != blank -%}
-            <a href="{{ section.settings.btn_secondary_url | default: '#' }}" class="np__btn np__btn--s">
-              {{ section.settings.btn_secondary_label }}
-            </a>
-          {%- endif -%}
-        </div>
-
+        {%- comment -%}9. Urgency — optional scarcity signal{%- endcomment -%}
         {%- if section.settings.urgency_text != blank -%}
           <p class="np__urgency np__reveal">
             <span class="np__urgency-dot"></span>
@@ -220,12 +239,14 @@
   --np-note:{{ section.settings.price_note_color }};
   --np-btn-bg:{{ section.settings.btn_primary_bg }};
   --np-btn-txt:{{ section.settings.btn_primary_text }};
-  --np-btn2-border:{{ section.settings.btn_secondary_border }};
-  --np-btn2-txt:{{ section.settings.btn_secondary_text }};
+  --np-btn2-txt:{{ section.settings.btn_secondary_text | default: '#1a4d1e' }};
   --np-trust-c:{{ section.settings.trust_color | default: '#0d7c5f' }};
+  --np-star:{{ section.settings.star_color | default: '#f59e0b' }};
 }
 
-/* ── Section ── */
+/* ══════════════════════════════════════
+   Section shell
+   ══════════════════════════════════════ */
 .np{
   background:var(--np-bg);
   padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
@@ -238,27 +259,51 @@
 }
 .np__grid{
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   gap:{{ section.settings.grid_gap }}px;
   {%- if section.settings.image_side == 'right' -%}flex-direction:row-reverse;{%- endif -%}
 }
 
-/* ── Studio container ── */
-.np__img-col{
+/* ══════════════════════════════════════
+   Studio — clean product display
+   ══════════════════════════════════════ */
+.np__media{
   flex:0 0 {{ section.settings.image_col_width }}%;
   max-width:{{ section.settings.image_col_width }}%;
+  position:sticky;
+  top:100px;
 }
 .np__studio{
   position:relative;
-  background:linear-gradient(to bottom, var(--np-studio-from), var(--np-studio-to));
-  border-radius:2rem;
+  background:linear-gradient(165deg, var(--np-studio-from), var(--np-studio-to));
+  border-radius:1.75rem;
   border:1px solid rgba(0,0,0,.04);
-  box-shadow:
-    0 25px 50px -12px rgba(0,60,30,.07),
-    0 0 0 1px rgba(0,0,0,.02);
-  padding:32px 20px;
+  box-shadow:0 25px 60px -12px rgba(0,60,30,.06);
+  padding:40px 24px 28px;
   overflow:hidden;
 }
+
+/* Certification badge */
+.np__cert{
+  position:absolute;
+  top:16px;left:16px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.5);
+  font-size:11px;
+  font-weight:600;
+  color:var(--np-active);
+  z-index:5;
+}
+.np__cert-ico{width:14px;height:14px;flex-shrink:0}
+
+/* Image stage */
 .np__img-stage{
   position:relative;
   width:100%;
@@ -271,57 +316,57 @@
   align-items:center;
   justify-content:center;
   opacity:0;
-  transition:opacity .45s ease;
+  transition:opacity .4s ease;
   pointer-events:none;
 }
-.np__img-frame--active{
-  opacity:1;
-  pointer-events:auto;
-}
+.np__img-frame--active{opacity:1;pointer-events:auto}
 .np__product-img{
-  width:70%;
-  max-height:90%;
+  width:72%;
+  max-height:88%;
   object-fit:contain;
   mix-blend-mode:multiply;
-  filter:drop-shadow(0 20px 40px rgba(0,0,0,.08));
+  filter:drop-shadow(0 16px 36px rgba(0,0,0,.08));
   display:block;
 }
 .np__img-frame--active .np__product-img{
-  animation:np-float 4s ease-in-out infinite;
+  animation:np-float 5s ease-in-out infinite;
 }
-.np__product-img--ph{width:55%;opacity:.35;mix-blend-mode:normal}
+.np__product-img--ph{width:55%;opacity:.3;mix-blend-mode:normal}
 
 @keyframes np-float{
   0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
+  50%{transform:translateY(-8px)}
 }
 
-/* Coverage badge (glassmorphism) */
+/* Coverage pill */
 .np__coverage{
   position:absolute;
-  bottom:16px;
+  bottom:14px;
   left:50%;
   transform:translateX(-50%);
   display:inline-flex;
   align-items:center;
-  gap:6px;
-  padding:8px 18px;
+  gap:5px;
+  padding:6px 16px;
   border-radius:999px;
   background:rgba(255,255,255,.82);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
-  box-shadow:0 4px 20px rgba(0,0,0,.06);
-  border:1px solid rgba(255,255,255,.6);
-  font-size:12px;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 4px 16px rgba(0,0,0,.05);
+  font-size:11px;
   font-weight:600;
   color:var(--np-active);
   white-space:nowrap;
   transition:opacity .3s ease;
+  z-index:5;
 }
-.np__coverage-ico{width:15px;height:15px;flex-shrink:0;opacity:.7}
+.np__coverage-ico{width:14px;height:14px;flex-shrink:0;opacity:.65}
 
-/* ── Info column ── */
-.np__info-col{
+/* ══════════════════════════════════════
+   Info column — CRO hierarchy
+   ══════════════════════════════════════ */
+.np__info{
   flex:1;
   min-width:0;
   display:flex;
@@ -329,26 +374,23 @@
   gap:{{ section.settings.info_gap }}px;
 }
 
-/* ── Badge ── */
-.np__badge{
-  display:inline-flex;
+/* 1. Social proof */
+.np__proof{
+  display:flex;
   align-items:center;
   gap:6px;
-  width:fit-content;
-  padding:5px 14px;
-  border-radius:999px;
-  background:var(--np-badge);
-  color:var(--np-badge-txt);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+  flex-wrap:wrap;
 }
-.np__badge-ico{width:13px;height:13px;flex-shrink:0}
+.np__stars{display:flex;gap:1px}
+.np__star{width:16px;height:16px;color:var(--np-star)}
+.np__star--empty{opacity:.25}
+.np__proof-rating{font-size:14px;font-weight:700;color:var(--np-heading)}
+.np__proof-sep{font-size:14px;color:var(--np-note)}
+.np__proof-count{font-size:14px;font-weight:500;color:var(--np-desc)}
 
-/* ── Heading ── */
+/* 2. Heading */
 .np__heading{
-  font-size:clamp(1.75rem,3.5vw,{{ section.settings.heading_size }}px);
+  font-size:clamp(1.65rem,3.4vw,{{ section.settings.heading_size }}px);
   font-weight:800;
   line-height:1.08;
   letter-spacing:-.025em;
@@ -357,7 +399,7 @@
   text-wrap:balance;
 }
 
-/* ── Description ── */
+/* 3. Description */
 .np__desc{
   font-size:{{ section.settings.desc_size }}px;
   line-height:1.65;
@@ -366,148 +408,196 @@
   max-width:520px;
 }
 
-/* ── Features ── */
-.np__features{
-  list-style:none;
-  margin:0;
-  padding:0;
+/* 4. Benefit chips */
+.np__chips{
   display:flex;
-  flex-direction:column;
-  gap:12px;
+  flex-wrap:wrap;
+  gap:8px;
 }
-.np__feat{
-  display:flex;
+.np__chip{
+  display:inline-flex;
   align-items:center;
-  gap:14px;
-}
-.np__feat-icon{
-  width:38px;height:38px;
-  border-radius:10px;
-  background:color-mix(in srgb,var(--np-icon) 10%,transparent);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  transition:transform .2s ease;
-}
-.np__feat:hover .np__feat-icon{transform:scale(1.08)}
-.np__feat-icon svg{width:19px;height:19px;color:var(--np-icon)}
-.np__feat-text{
-  font-size:{{ section.settings.feat_size }}px;
-  font-weight:500;
+  gap:6px;
+  padding:7px 14px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--np-icon) 8%,transparent);
+  font-size:13px;
+  font-weight:600;
   color:var(--np-feat);
+  white-space:nowrap;
+}
+.np__chip-ico{
+  width:15px;height:15px;
+  color:var(--np-icon);
+  flex-shrink:0;
 }
 
-/* ── Variant selector ── */
+/* Divider */
+.np__divider{
+  border:none;
+  height:1px;
+  background:color-mix(in srgb,var(--np-border) 60%,transparent);
+  margin:0;
+}
+
+/* 5. Variant selector */
 .np__variants{display:flex;flex-direction:column;gap:10px}
-.np__variants-label{margin:0;font-size:14px;font-weight:700;color:var(--np-heading);letter-spacing:.01em}
-.np__variants-row{display:flex;flex-wrap:wrap;gap:10px}
+.np__variants-label{margin:0;font-size:14px;font-weight:700;color:var(--np-heading)}
+.np__var-grid{display:flex;flex-wrap:wrap;gap:8px}
 .np__var{
   position:relative;
-  min-width:80px;
-  padding:14px 18px 12px;
+  min-width:90px;
+  padding:12px 16px 10px;
   border:2px solid var(--np-border);
   border-radius:12px;
-  background:transparent;
+  background:#fff;
   cursor:pointer;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:2px;
-  transition:border-color .25s ease,box-shadow .25s ease,transform .2s ease;
+  transition:all .2s ease;
 }
 .np__var:hover{
-  border-color:color-mix(in srgb,var(--np-active) 45%,var(--np-border));
+  border-color:color-mix(in srgb,var(--np-active) 40%,var(--np-border));
   transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
 }
 .np__var--active{
   border-color:var(--np-active);
-  box-shadow:0 0 0 1px var(--np-active),0 6px 20px color-mix(in srgb,var(--np-active) 14%,transparent);
+  background:color-mix(in srgb,var(--np-active) 4%,#fff);
+  box-shadow:0 0 0 1px var(--np-active),0 6px 20px color-mix(in srgb,var(--np-active) 10%,transparent);
   transform:translateY(-2px);
 }
 .np__var-tag{
   position:absolute;
-  top:-10px;left:50%;transform:translateX(-50%);
+  top:-9px;left:50%;transform:translateX(-50%);
   padding:2px 10px;
   border-radius:999px;
   background:var(--np-tag);
   color:#fff;
-  font-size:10px;
+  font-size:9px;
   font-weight:700;
-  letter-spacing:.04em;
+  letter-spacing:.06em;
   text-transform:uppercase;
   white-space:nowrap;
 }
-.np__var-name{font-size:15px;font-weight:700;color:var(--np-heading)}
+.np__var-size{font-size:15px;font-weight:700;color:var(--np-heading)}
+.np__var-cov{font-size:11px;font-weight:500;color:var(--np-icon);opacity:.85}
 .np__var-price{font-size:13px;font-weight:600;color:var(--np-active)}
 
-/* ── Price block ── */
-.np__price-block{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  padding-top:8px;
-  border-top:1px solid color-mix(in srgb,var(--np-border) 50%,transparent);
-}
-.np__price-row{display:flex;align-items:baseline;gap:12px}
+/* 6. Price anchoring */
+.np__price-block{display:flex;flex-direction:column;gap:4px}
+.np__price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .np__price{
   font-size:{{ section.settings.price_size }}px;
   font-weight:800;
   color:var(--np-price-c);
   letter-spacing:-.02em;
   line-height:1;
-  transition:opacity .3s ease;
+  transition:opacity .2s ease;
 }
 .np__price-was{
   font-size:18px;
   font-weight:500;
   color:var(--np-note);
   text-decoration:line-through;
-  transition:opacity .3s ease;
+  transition:opacity .2s ease;
+}
+.np__savings{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--np-icon) 12%,transparent);
+  color:var(--np-icon);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+  transition:opacity .2s ease;
 }
 .np__price-note{margin:0;font-size:13px;color:var(--np-note);line-height:1.4}
 
-/* ── Trust bar ── */
+/* 7. CTA block */
+.np__cta-block{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.np__cta{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  padding:16px 32px;
+  border-radius:{{ section.settings.btn_radius }}px;
+  background:var(--np-btn-bg);
+  color:var(--np-btn-txt);
+  font-size:16px;
+  font-weight:700;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+  transition:transform .15s ease,box-shadow .2s ease;
+  position:relative;
+  overflow:hidden;
+}
+.np__cta::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(rgba(255,255,255,.08),rgba(255,255,255,0));
+  pointer-events:none;
+}
+.np__cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px color-mix(in srgb,var(--np-btn-bg) 30%,transparent);
+}
+.np__cta:active{transform:translateY(0);box-shadow:none}
+.np__cta-ico{width:20px;height:20px;flex-shrink:0}
+.np__cta-price{
+  opacity:.75;
+  font-weight:600;
+  margin-left:4px;
+}
+.np__cta-price::before{content:'— '}
+
+.np__cta-micro{
+  margin:0;
+  font-size:12px;
+  color:var(--np-note);
+  text-align:center;
+  width:100%;
+}
+
+.np__link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
+  font-weight:600;
+  color:var(--np-btn2-txt);
+  text-decoration:none;
+  transition:gap .2s ease;
+}
+.np__link:hover{gap:10px}
+.np__link-arrow{width:16px;height:16px;flex-shrink:0}
+
+/* 8. Trust strip */
 .np__trust{
   display:flex;
   flex-wrap:wrap;
-  gap:18px;
+  gap:16px;
+  padding-top:8px;
+  border-top:1px solid color-mix(in srgb,var(--np-border) 50%,transparent);
 }
 .np__trust-item{
   display:flex;
   align-items:center;
-  gap:7px;
-  font-size:13px;
+  gap:6px;
+  font-size:12px;
   font-weight:500;
   color:var(--np-feat);
 }
-.np__trust-ico{
-  width:18px;height:18px;
-  color:var(--np-trust-c);
-  flex-shrink:0;
-}
+.np__trust-ico{width:16px;height:16px;color:var(--np-trust-c);flex-shrink:0}
 
-/* ── CTAs ── */
-.np__ctas{display:flex;gap:10px;flex-wrap:wrap}
-.np__btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  gap:8px;
-  padding:14px 28px;
-  border-radius:{{ section.settings.btn_radius }}px;
-  font-size:15px;font-weight:700;
-  text-decoration:none;white-space:nowrap;
-  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
-}
-.np__btn:hover{transform:translateY(-2px)}
-.np__btn--p{
-  background:var(--np-btn-bg);color:var(--np-btn-txt);border:2px solid var(--np-btn-bg);
-}
-.np__btn--p:hover{box-shadow:0 10px 28px color-mix(in srgb,var(--np-btn-bg) 30%,transparent)}
-.np__btn--s{
-  background:transparent;color:var(--np-btn2-txt);border:2px solid var(--np-btn2-border);
-}
-.np__btn--s:hover{background:color-mix(in srgb,var(--np-btn2-border) 6%,transparent)}
-.np__btn-ico{width:18px;height:18px;flex-shrink:0}
-
-/* ── Urgency ── */
+/* 9. Urgency */
 .np__urgency{
   display:inline-flex;
   align-items:center;
@@ -522,65 +612,78 @@
   color:#dc2626;
 }
 .np__urgency-dot{
-  width:8px;height:8px;
+  width:7px;height:7px;
   border-radius:50%;
   background:#ef4444;
-  animation:np-pulse 1.5s ease-in-out infinite;
+  animation:np-pulse 1.4s ease-in-out infinite;
 }
 @keyframes np-pulse{
   0%,100%{opacity:1;transform:scale(1)}
-  50%{opacity:.4;transform:scale(.7)}
+  50%{opacity:.35;transform:scale(.65)}
 }
 
-/* ── Scroll-reveal ── */
+/* ══════════════════════════════════════
+   Scroll-reveal stagger
+   ══════════════════════════════════════ */
 .np__reveal{
   opacity:0;
-  transform:translateY(20px);
-  transition:opacity .55s ease,transform .55s ease;
+  transform:translateY(18px);
+  transition:opacity .5s ease,transform .5s ease;
 }
 .np__reveal--visible{opacity:1;transform:translateY(0)}
-.np__info-col .np__reveal:nth-child(1){transition-delay:.05s}
-.np__info-col .np__reveal:nth-child(2){transition-delay:.1s}
-.np__info-col .np__reveal:nth-child(3){transition-delay:.15s}
-.np__info-col .np__reveal:nth-child(4){transition-delay:.2s}
-.np__info-col .np__reveal:nth-child(5){transition-delay:.25s}
-.np__info-col .np__reveal:nth-child(6){transition-delay:.3s}
-.np__info-col .np__reveal:nth-child(7){transition-delay:.35s}
-.np__info-col .np__reveal:nth-child(8){transition-delay:.4s}
-.np__info-col .np__reveal:nth-child(9){transition-delay:.45s}
+.np__info .np__reveal:nth-child(2){transition-delay:.06s}
+.np__info .np__reveal:nth-child(3){transition-delay:.12s}
+.np__info .np__reveal:nth-child(4){transition-delay:.18s}
+.np__info .np__reveal:nth-child(5){transition-delay:.22s}
+.np__info .np__reveal:nth-child(6){transition-delay:.26s}
+.np__info .np__reveal:nth-child(7){transition-delay:.3s}
+.np__info .np__reveal:nth-child(8){transition-delay:.34s}
+.np__info .np__reveal:nth-child(9){transition-delay:.38s}
+.np__info .np__reveal:nth-child(10){transition-delay:.42s}
 
-/* ── Tablet ── */
+/* ══════════════════════════════════════
+   Tablet (768-991)
+   ══════════════════════════════════════ */
 @media(max-width:991px) and (min-width:768px){
-  .np__grid{gap:32px}
-  .np__img-col{flex:0 0 42%;max-width:42%}
-  .np__studio{padding:24px 16px;border-radius:1.5rem}
-  .np__heading{font-size:clamp(1.5rem,3.2vw,{{ section.settings.heading_size | minus: 6 }}px)}
+  .np__grid{gap:28px}
+  .np__media{flex:0 0 40%;max-width:40%;position:static}
+  .np__studio{padding:28px 16px 22px;border-radius:1.25rem}
+  .np__heading{font-size:clamp(1.4rem,3vw,{{ section.settings.heading_size | minus: 8 }}px)}
+  .np__var{min-width:75px;padding:10px 12px 8px}
+  .np__cta{padding:14px 24px;font-size:15px}
 }
 
-/* ── Mobile ── */
+/* ══════════════════════════════════════
+   Mobile (<768)
+   ══════════════════════════════════════ */
 @media(max-width:767px){
   .np{padding:{{ section.settings.padding_top | divided_by: 2 }}px 0 {{ section.settings.padding_bottom | divided_by: 2 }}px}
-  .np__grid{flex-direction:column!important;gap:28px}
-  .np__img-col{flex:none;max-width:none;width:100%}
+  .np__grid{flex-direction:column!important;gap:24px}
+  .np__media{flex:none;max-width:none;width:100%;position:static}
   .np__studio{
-    max-width:360px;
+    max-width:340px;
     margin:0 auto;
-    padding:24px 16px;
-    border-radius:1.5rem;
+    padding:28px 16px 22px;
+    border-radius:1.25rem;
   }
   .np__heading{
-    font-size:clamp(1.5rem,6.5vw,{{ section.settings.heading_size_mobile }}px);
+    font-size:clamp(1.4rem,6vw,{{ section.settings.heading_size_mobile }}px);
     line-height:1.12;
   }
-  .np__desc{font-size:15px}
-  .np__variants-row{width:100%}
-  .np__var{flex:1;min-width:70px;padding:12px 12px 10px}
+  .np__desc{font-size:14px}
+  .np__chips{gap:6px}
+  .np__chip{font-size:12px;padding:6px 11px}
+  .np__var-grid{width:100%}
+  .np__var{flex:1;min-width:70px;padding:10px 8px 8px}
+  .np__var-size{font-size:14px}
+  .np__var-cov{font-size:10px}
+  .np__var-price{font-size:12px}
   .np__price{font-size:{{ section.settings.price_size | minus: 6 }}px}
-  .np__ctas{width:100%}
-  .np__btn{flex:1;text-align:center;padding:14px 20px}
-  .np__trust{gap:14px}
-  .np__trust-item{font-size:12px}
-  .np__coverage{font-size:11px;padding:6px 14px}
+  .np__cta{padding:15px 20px;font-size:15px}
+  .np__trust{gap:12px}
+  .np__trust-item{font-size:11px}
+  .np__coverage{font-size:10px;padding:5px 12px}
+  .np__cert{font-size:10px;padding:4px 10px}
   .np__reveal{opacity:1;transform:none;transition:none}
 }
 </style>
@@ -593,6 +696,8 @@
 
     var priceEl=sec.querySelector('[data-np-price]');
     var compareEl=sec.querySelector('[data-np-compare]');
+    var savingsEl=sec.querySelector('[data-np-savings]');
+    var ctaPriceEl=sec.querySelector('[data-np-cta-price]');
     var coverageWrap=sec.querySelector('[data-np-coverage]');
     var coverageTxt=coverageWrap?coverageWrap.querySelector('.np__coverage-txt'):null;
     var defaultFrame=sec.querySelector('.np__img-frame--default');
@@ -609,11 +714,16 @@
         var vid=btn.getAttribute('data-vid');
         var hasImg=btn.getAttribute('data-has-img')==='1';
 
-        if(priceEl&&price)priceEl.textContent=price;
+        if(priceEl&&price){priceEl.textContent=price}
+        if(ctaPriceEl&&price){ctaPriceEl.textContent=price}
 
-        if(compareEl){
-          if(compare){compareEl.textContent=compare;compareEl.style.display=''}
-          else{compareEl.style.display='none'}
+        if(compareEl&&savingsEl){
+          if(compare){
+            compareEl.textContent=compare;compareEl.style.display='';
+            savingsEl.style.display='';
+          }else{
+            compareEl.style.display='none';savingsEl.style.display='none';
+          }
         }
 
         if(coverageTxt){
@@ -633,7 +743,7 @@
         entries.forEach(function(e){
           if(e.isIntersecting){e.target.classList.add('np__reveal--visible');io.unobserve(e.target)}
         });
-      },{threshold:0.12,rootMargin:'0px 0px -30px 0px'});
+      },{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
       sec.querySelectorAll('.np__reveal').forEach(function(el){io.observe(el)});
     }else{
       sec.querySelectorAll('.np__reveal').forEach(function(el){el.classList.add('np__reveal--visible')});
@@ -653,401 +763,103 @@
   "settings": [
 
     { "type": "header", "content": "─── Colors ───────────────────────" },
-    {
-      "type": "color",
-      "id": "bg_color",
-      "label": "Section Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "studio_bg_from",
-      "label": "Studio Container — Top",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "studio_bg_to",
-      "label": "Studio Container — Bottom",
-      "default": "#f4f9f5"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading Color",
-      "default": "#111827"
-    },
-    {
-      "type": "color",
-      "id": "desc_color",
-      "label": "Description Color",
-      "default": "#6b7280"
-    },
-    {
-      "type": "color",
-      "id": "feature_icon_color",
-      "label": "Feature Icon Color",
-      "default": "#0d7c5f"
-    },
-    {
-      "type": "color",
-      "id": "feature_text_color",
-      "label": "Feature Text Color",
-      "default": "#374151"
-    },
-    {
-      "type": "color",
-      "id": "price_color",
-      "label": "Price Color",
-      "default": "#111827"
-    },
-    {
-      "type": "color",
-      "id": "price_note_color",
-      "label": "Price Note Color",
-      "default": "#9ca3af"
-    },
-    {
-      "type": "color",
-      "id": "trust_color",
-      "label": "Trust Icon Color",
-      "default": "#0d7c5f"
-    },
+    { "type": "color", "id": "bg_color", "label": "Section Background", "default": "#ffffff" },
+    { "type": "color", "id": "studio_bg_from", "label": "Studio — Top", "default": "#ffffff" },
+    { "type": "color", "id": "studio_bg_to", "label": "Studio — Bottom", "default": "#f4f9f5" },
+    { "type": "color", "id": "heading_color", "label": "Heading Color", "default": "#111827" },
+    { "type": "color", "id": "desc_color", "label": "Description Color", "default": "#6b7280" },
+    { "type": "color", "id": "feature_icon_color", "label": "Feature / Chip Color", "default": "#0d7c5f" },
+    { "type": "color", "id": "feature_text_color", "label": "Feature Text Color", "default": "#374151" },
+    { "type": "color", "id": "price_color", "label": "Price Color", "default": "#111827" },
+    { "type": "color", "id": "price_note_color", "label": "Price Note Color", "default": "#9ca3af" },
+    { "type": "color", "id": "trust_color", "label": "Trust Icon Color", "default": "#0d7c5f" },
+    { "type": "color", "id": "star_color", "label": "Review Star Color", "default": "#f59e0b" },
 
-    { "type": "header", "content": "─── Badge ────────────────────────" },
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "Badge Text",
-      "default": "BEST SELLER"
-    },
-    {
-      "type": "color",
-      "id": "badge_bg_color",
-      "label": "Badge Background",
-      "default": "#0d7c5f"
-    },
-    {
-      "type": "color",
-      "id": "badge_text_color",
-      "label": "Badge Text Color",
-      "default": "#ffffff"
-    },
+    { "type": "header", "content": "─── Social Proof ─────────────────" },
+    { "type": "text", "id": "review_rating", "label": "Rating (e.g. 4.9)", "default": "4.9" },
+    { "type": "text", "id": "review_count", "label": "Review Count Text", "default": "2,400+ Reviews" },
+    { "type": "range", "id": "review_stars", "label": "Filled Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
 
     { "type": "header", "content": "─── Content ──────────────────────" },
-    {
-      "type": "image_picker",
-      "id": "product_image",
-      "label": "Default Product Image",
-      "info": "Fallback when a variant doesn't have its own image. Transparent PNG recommended."
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Herbishield Concentrated Insecticide"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area with a single application cycle."
-    },
+    { "type": "image_picker", "id": "product_image", "label": "Default Product Image", "info": "Transparent PNG recommended (900px wide)." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Herbishield Concentrated Insecticide" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area." },
+    { "type": "text", "id": "cert_text", "label": "Certification Badge", "info": "Floats on studio image. Leave blank to hide.", "default": "100% Organic" },
 
-    { "type": "header", "content": "─── Trust Bar ────────────────────" },
-    {
-      "type": "text",
-      "id": "trust_1",
-      "label": "Trust Item 1",
-      "default": "Free Shipping"
-    },
-    {
-      "type": "text",
-      "id": "trust_2",
-      "label": "Trust Item 2",
-      "default": "30-Day Guarantee"
-    },
-    {
-      "type": "text",
-      "id": "trust_3",
-      "label": "Trust Item 3",
-      "default": "Secure Checkout"
-    },
-
-    { "type": "header", "content": "─── Urgency ──────────────────────" },
-    {
-      "type": "text",
-      "id": "urgency_text",
-      "label": "Urgency Text",
-      "info": "Leave blank to hide. E.g. 'Selling fast — only 12 left'",
-      "default": ""
-    },
+    { "type": "header", "content": "─── Trust & Urgency ──────────────" },
+    { "type": "text", "id": "trust_1", "label": "Trust Item 1", "default": "Free Shipping" },
+    { "type": "text", "id": "trust_2", "label": "Trust Item 2", "default": "30-Day Guarantee" },
+    { "type": "text", "id": "trust_3", "label": "Trust Item 3", "default": "Secure Checkout" },
+    { "type": "text", "id": "urgency_text", "label": "Urgency Text", "info": "Leave blank to hide.", "default": "" },
 
     { "type": "header", "content": "─── Sizing ───────────────────────" },
-    {
-      "type": "text",
-      "id": "size_label",
-      "label": "Size Selector Label",
-      "default": "Select Size"
-    },
-    {
-      "type": "color",
-      "id": "card_border_color",
-      "label": "Size Card Border",
-      "default": "#e5e7eb"
-    },
-    {
-      "type": "color",
-      "id": "active_border_color",
-      "label": "Active Size Border",
-      "default": "#1a4d1e"
-    },
-    {
-      "type": "color",
-      "id": "popular_tag_color",
-      "label": "Popular Tag Background",
-      "default": "#0d7c5f"
-    },
+    { "type": "text", "id": "size_label", "label": "Size Selector Label", "default": "Select Size" },
+    { "type": "color", "id": "card_border_color", "label": "Size Card Border", "default": "#e5e7eb" },
+    { "type": "color", "id": "active_border_color", "label": "Active Size Border", "default": "#1a4d1e" },
+    { "type": "color", "id": "popular_tag_color", "label": "Popular Tag Background", "default": "#0d7c5f" },
 
     { "type": "header", "content": "─── Pricing & CTAs ───────────────" },
-    {
-      "type": "text",
-      "id": "price",
-      "label": "Display Price",
-      "default": "€39.99"
-    },
-    {
-      "type": "text",
-      "id": "price_note",
-      "label": "Price Note",
-      "default": "Incl. VAT · Free shipping over €50"
-    },
-    {
-      "type": "text",
-      "id": "btn_primary_label",
-      "label": "Primary Button Label",
-      "default": "Add to Cart"
-    },
-    {
-      "type": "url",
-      "id": "btn_primary_url",
-      "label": "Primary Button URL"
-    },
-    {
-      "type": "color",
-      "id": "btn_primary_bg",
-      "label": "Primary Button Background",
-      "default": "#1a4d1e"
-    },
-    {
-      "type": "color",
-      "id": "btn_primary_text",
-      "label": "Primary Button Text",
-      "default": "#ffffff"
-    },
-    {
-      "type": "text",
-      "id": "btn_secondary_label",
-      "label": "Secondary Button Label",
-      "default": "Learn More"
-    },
-    {
-      "type": "url",
-      "id": "btn_secondary_url",
-      "label": "Secondary Button URL"
-    },
-    {
-      "type": "color",
-      "id": "btn_secondary_border",
-      "label": "Secondary Button Border",
-      "default": "#1a4d1e"
-    },
-    {
-      "type": "color",
-      "id": "btn_secondary_text",
-      "label": "Secondary Button Text",
-      "default": "#1a4d1e"
-    },
-    {
-      "type": "range",
-      "id": "btn_radius",
-      "label": "Button Border Radius (px)",
-      "min": 0, "max": 30, "step": 2,
-      "default": 12
-    },
+    { "type": "text", "id": "price", "label": "Display Price", "default": "€39.99" },
+    { "type": "text", "id": "price_note", "label": "Price Note", "default": "Incl. VAT · Free shipping over €50" },
+    { "type": "text", "id": "btn_primary_label", "label": "CTA Label", "default": "Add to Cart" },
+    { "type": "url", "id": "btn_primary_url", "label": "CTA URL" },
+    { "type": "color", "id": "btn_primary_bg", "label": "CTA Background", "default": "#1a4d1e" },
+    { "type": "color", "id": "btn_primary_text", "label": "CTA Text", "default": "#ffffff" },
+    { "type": "text", "id": "cta_micro", "label": "CTA Micro-copy", "info": "Small text below button to reduce anxiety.", "default": "Free shipping over €50 · 30-day money-back guarantee" },
+    { "type": "text", "id": "btn_secondary_label", "label": "Secondary Link Label", "default": "Learn More" },
+    { "type": "url", "id": "btn_secondary_url", "label": "Secondary Link URL" },
+    { "type": "color", "id": "btn_secondary_text", "label": "Secondary Link Color", "default": "#1a4d1e" },
+    { "type": "range", "id": "btn_radius", "label": "CTA Border Radius (px)", "min": 0, "max": 30, "step": 2, "default": 14 },
+
+    { "type": "header", "content": "─── Badge (Legacy) ───────────────" },
+    { "type": "color", "id": "badge_bg_color", "label": "Badge Background", "default": "#0d7c5f" },
+    { "type": "color", "id": "badge_text_color", "label": "Badge Text Color", "default": "#ffffff" },
+    { "type": "text", "id": "badge_text", "label": "Badge Text", "info": "Replaced by Social Proof above. Left for backward compat.", "default": "" },
 
     { "type": "header", "content": "─── Layout ───────────────────────" },
-    {
-      "type": "select",
-      "id": "image_side",
-      "label": "Image Side (Desktop)",
-      "options": [
-        { "value": "left",  "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "left"
-    },
-    {
-      "type": "range",
-      "id": "max_width",
-      "label": "Max Width (px)",
-      "min": 900, "max": 1400, "step": 20,
-      "default": 1100
-    },
-    {
-      "type": "range",
-      "id": "image_col_width",
-      "label": "Image Column Width (%)",
-      "min": 30, "max": 55, "step": 5,
-      "default": 42
-    },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "label": "Grid Gap (px)",
-      "min": 20, "max": 80, "step": 4,
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "info_gap",
-      "label": "Info Content Gap (px)",
-      "min": 10, "max": 40, "step": 2,
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Padding Top (px)",
-      "min": 0, "max": 160, "step": 4,
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Padding Bottom (px)",
-      "min": 0, "max": 160, "step": 4,
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "padding_h",
-      "label": "Padding Horizontal (px)",
-      "min": 16, "max": 80, "step": 4,
-      "default": 24
-    },
+    { "type": "select", "id": "image_side", "label": "Image Side (Desktop)", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "range", "id": "max_width", "label": "Max Width (px)", "min": 900, "max": 1400, "step": 20, "default": 1100 },
+    { "type": "range", "id": "image_col_width", "label": "Image Column (%)", "min": 30, "max": 55, "step": 5, "default": 42 },
+    { "type": "range", "id": "grid_gap", "label": "Grid Gap (px)", "min": 20, "max": 80, "step": 4, "default": 48 },
+    { "type": "range", "id": "info_gap", "label": "Info Content Gap (px)", "min": 10, "max": 40, "step": 2, "default": 18 },
+    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 160, "step": 4, "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 160, "step": 4, "default": 80 },
+    { "type": "range", "id": "padding_h", "label": "Padding Horizontal (px)", "min": 16, "max": 80, "step": 4, "default": 24 },
 
     { "type": "header", "content": "─── Typography ───────────────────" },
-    {
-      "type": "range",
-      "id": "heading_size",
-      "label": "Heading — Desktop (px)",
-      "min": 28, "max": 72, "step": 2,
-      "default": 44
-    },
-    {
-      "type": "range",
-      "id": "heading_size_mobile",
-      "label": "Heading — Mobile (px)",
-      "min": 24, "max": 48, "step": 2,
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "desc_size",
-      "label": "Description Font Size (px)",
-      "min": 14, "max": 20, "step": 1,
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "feat_size",
-      "label": "Feature Font Size (px)",
-      "min": 14, "max": 20, "step": 1,
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "price_size",
-      "label": "Price Font Size (px)",
-      "min": 24, "max": 56, "step": 2,
-      "default": 36
-    }
+    { "type": "range", "id": "heading_size", "label": "Heading — Desktop (px)", "min": 28, "max": 72, "step": 2, "default": 40 },
+    { "type": "range", "id": "heading_size_mobile", "label": "Heading — Mobile (px)", "min": 24, "max": 48, "step": 2, "default": 28 },
+    { "type": "range", "id": "desc_size", "label": "Description (px)", "min": 14, "max": 20, "step": 1, "default": 15 },
+    { "type": "range", "id": "feat_size", "label": "Feature (px)", "min": 14, "max": 20, "step": 1, "default": 16 },
+    { "type": "range", "id": "price_size", "label": "Price (px)", "min": 24, "max": 56, "step": 2, "default": 34 }
 
   ],
   "blocks": [
     {
       "type": "feature",
-      "name": "Feature",
+      "name": "Benefit Chip",
       "settings": [
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icon",
-          "options": [
-            { "value": "shield",  "label": "Shield Check" },
-            { "value": "leaf",    "label": "Leaf" },
-            { "value": "flask",   "label": "Flask / Chemistry" },
-            { "value": "droplet", "label": "Droplet" },
-            { "value": "check",   "label": "Circle Check" }
-          ],
-          "default": "shield"
-        },
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Feature Text",
-          "default": "Broad-spectrum pest defence"
-        }
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+          { "value": "shield", "label": "Shield Check" },
+          { "value": "leaf", "label": "Leaf" },
+          { "value": "flask", "label": "Flask" },
+          { "value": "droplet", "label": "Droplet" },
+          { "value": "check", "label": "Checkmark" }
+        ], "default": "check" },
+        { "type": "text", "id": "text", "label": "Benefit Text", "default": "Kills pests on contact" }
       ]
     },
     {
       "type": "size_variant",
       "name": "Size Variant",
       "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Size Label",
-          "default": "1L"
-        },
-        {
-          "type": "text",
-          "id": "price",
-          "label": "Price",
-          "default": "€39.99"
-        },
-        {
-          "type": "text",
-          "id": "compare_price",
-          "label": "Compare-at Price",
-          "info": "Optional. Shows strikethrough next to price."
-        },
-        {
-          "type": "text",
-          "id": "coverage",
-          "label": "Coverage Text",
-          "info": "E.g. 'Treats up to 500 sq.m'",
-          "default": ""
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Variant Image",
-          "info": "Unique product image for this size. Falls back to section image."
-        },
-        {
-          "type": "text",
-          "id": "popular_tag",
-          "label": "Tag (e.g. POPULAR)",
-          "info": "Leave blank to hide"
-        },
-        {
-          "type": "checkbox",
-          "id": "selected",
-          "label": "Selected by Default",
-          "default": false
-        }
+        { "type": "text", "id": "label", "label": "Size Label", "default": "1L" },
+        { "type": "text", "id": "price", "label": "Price", "default": "€39.99" },
+        { "type": "text", "id": "compare_price", "label": "Compare-at Price", "info": "Shows strikethrough + SAVE badge." },
+        { "type": "text", "id": "coverage", "label": "Coverage Text", "info": "Shows on variant card & floating pill.", "default": "" },
+        { "type": "image_picker", "id": "image", "label": "Variant Image", "info": "Falls back to section image." },
+        { "type": "text", "id": "popular_tag", "label": "Tag (e.g. POPULAR)", "info": "Leave blank to hide" },
+        { "type": "checkbox", "id": "selected", "label": "Selected by Default", "default": false }
       ]
     }
   ],
