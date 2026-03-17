@@ -10,16 +10,7 @@
 
   {%- comment -%}── Header ──{%- endcomment -%}
   <div class="tm__header">
-    <div class="tm__icon" aria-hidden="true">
-      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 38C30 38 24 28 18 22C14 18 8 16 8 16C8 16 16 18 22 22C28 26 30 38 30 38Z" fill="{{ section.settings.leaf_color }}"/>
-        <path d="M30 38C30 38 36 28 42 22C46 18 52 16 52 16C52 16 44 18 38 22C32 26 30 38 30 38Z" fill="{{ section.settings.leaf_color }}"/>
-        <path d="M30 38C30 38 28 26 24 18C21 12 16 6 16 6C16 6 22 12 26 18C30 24 30 38 30 38Z" fill="{{ section.settings.leaf_accent }}"/>
-        <path d="M30 38C30 38 32 26 36 18C39 12 44 6 44 6C44 6 38 12 34 18C30 24 30 38 30 38Z" fill="{{ section.settings.leaf_accent }}"/>
-        <line x1="30" y1="38" x2="30" y2="56" stroke="{{ section.settings.leaf_color }}" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
-    </div>
-
+    <span class="tm__eyebrow">Reviews</span>
     {%- if section.settings.heading != blank -%}
       <h2 class="tm__heading">{{ section.settings.heading }}</h2>
     {%- endif -%}
@@ -127,45 +118,50 @@
   background:var(--tm-bg);
   padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
   overflow:hidden;
-  font-family:'Inter',sans-serif;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 /* ── Header ── */
 .tm__header{
-  max-width:1200px;
+  max-width:720px;
   margin:0 auto;
   padding:0 {{ section.settings.padding_h }}px;
   text-align:center;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:{{ section.settings.header_gap }}px;
+  gap:12px;
   margin-bottom:{{ section.settings.rows_gap }}px;
 }
 
-.tm__icon svg{
-  width:{{ section.settings.icon_size }}px;
-  height:{{ section.settings.icon_size }}px;
+.tm__eyebrow{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#2d6b2d;
+  margin:0;
 }
 
 .tm__heading{
   font-family:'Inter',sans-serif;
   font-size:{{ section.settings.heading_size }}px;
-  font-weight:800;
-  font-style:italic;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  line-height:1.15;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  line-height:1.2;
   color:var(--tm-heading);
   margin:0;
 }
 
 .tm__sub{
+  font-family:'Inter',sans-serif;
   font-size:{{ section.settings.sub_size }}px;
-  line-height:1.55;
+  line-height:1.5;
   color:var(--tm-sub);
   margin:0;
-  max-width:560px;
+  max-width:520px;
+  font-weight:400;
 }
 
 /* ── Track / Marquee ── */
