@@ -125,6 +125,80 @@
         "leaf_opacity": 20
       }
     },
+    "applications_Bx4R9n": {
+      "type": "Applications",
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "title": "Concentrated Formula",
+            "text": "An emulsifiable concentrate designed for efficient plant care support."
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "title": "Reliable Performance",
+            "text": "Designed to support consistent plant health when used as directed."
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "title": "Supports Plant Vitality",
+            "text": "Helps manage insect-related plant stress to maintain healthy growth conditions."
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "title": "Healthier Leaves & Stronger Growth",
+            "text": "Helps maintain leaf strength and vitality across different types of crops."
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ],
+      "name": "Applications Grid",
+      "settings": {
+        "bg_color": "#ffffff",
+        "heading_color": "#111827",
+        "subtext_color": "#6b7280",
+        "accent_color": "#0d7c5f",
+        "card_text_color": "#ffffff",
+        "hero_text_color": "#374151",
+        "badge_bg": "#d4a017",
+        "badge_text": "#ffffff",
+        "heading": "Why Herbishield Works",
+        "subtext": "",
+        "hero_badge": "HERBISHIELD FORMULA",
+        "hero_heading": "Professional-grade protection that keeps your crops healthy and thriving all season long.",
+        "heading_size": 36,
+        "heading_size_mobile": 26,
+        "sub_size": 16,
+        "card_title_size": 17,
+        "card_text_size": 13,
+        "hero_text_size": 16,
+        "accent_width": 36,
+        "accent_height": 4,
+        "card_radius": 16,
+        "card_padding": 20,
+        "hero_padding": 24,
+        "card_min_height": 220,
+        "card_min_height_mobile": 180,
+        "grid_gap": 16,
+        "grid_gap_mobile": 12,
+        "header_gap": 12,
+        "grid_top_gap": 36,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "padding_h": 24
+      }
+    },
     "new_product_URMeYP": {
       "type": "NewProduct",
       "blocks": {
@@ -240,78 +314,64 @@
         "price_size": 36
       }
     },
-    "applications_Bx4R9n": {
-      "type": "Applications",
+    "video_carousel_Mm8pQ2": {
+      "type": "VideoCarousel",
       "blocks": {
-        "card_1": {
-          "type": "card",
+        "video_card_1": {
+          "type": "video_card",
           "settings": {
-            "title": "Concentrated Formula",
-            "text": "An emulsifiable concentrate designed for efficient plant care support."
+            "video_url": "",
+            "category": "PLANT CARE",
+            "duration": "2:45",
+            "title": "How to Apply Herbishield in Early Growth Stage",
+            "description": "Step-by-step walkthrough for consistent, safe application in your first crop cycle."
           }
         },
-        "card_2": {
-          "type": "card",
+        "video_card_2": {
+          "type": "video_card",
           "settings": {
-            "title": "Reliable Performance",
-            "text": "Designed to support consistent plant health when used as directed."
+            "video_url": "",
+            "category": "FIELD DEMO",
+            "duration": "3:20",
+            "title": "Real Field Results After 7 Days",
+            "description": "See side-by-side crop condition changes and learn what to monitor after treatment."
           }
         },
-        "card_3": {
-          "type": "card",
+        "video_card_3": {
+          "type": "video_card",
           "settings": {
-            "title": "Supports Plant Vitality",
-            "text": "Helps manage insect-related plant stress to maintain healthy growth conditions."
+            "video_url": "",
+            "category": "BEST PRACTICE",
+            "duration": "1:58",
+            "title": "Top 5 Mistakes to Avoid During Application",
+            "description": "Improve outcomes by avoiding common dosing and timing mistakes growers make."
           }
         },
-        "card_4": {
-          "type": "card",
+        "video_card_4": {
+          "type": "video_card",
           "settings": {
-            "title": "Healthier Leaves & Stronger Growth",
-            "text": "Helps maintain leaf strength and vitality across different types of crops."
+            "video_url": "",
+            "category": "TIPS",
+            "duration": "2:12",
+            "title": "Mixing Guide for Different Crop Types",
+            "description": "Quick dosage guidance for vegetables, herbs, and fruit crops in one concise reel."
           }
         }
       },
       "block_order": [
-        "card_1",
-        "card_2",
-        "card_3",
-        "card_4"
+        "video_card_1",
+        "video_card_2",
+        "video_card_3",
+        "video_card_4"
       ],
-      "name": "Applications Grid",
+      "name": "Video Carousel",
       "settings": {
-        "bg_color": "#ffffff",
-        "heading_color": "#111827",
-        "subtext_color": "#6b7280",
-        "accent_color": "#0d7c5f",
-        "card_text_color": "#ffffff",
-        "hero_text_color": "#374151",
-        "badge_bg": "#d4a017",
-        "badge_text": "#ffffff",
-        "heading": "Why Herbishield Works",
-        "subtext": "",
-        "hero_badge": "HERBISHIELD FORMULA",
-        "hero_heading": "Professional-grade protection that keeps your crops healthy and thriving all season long.",
-        "heading_size": 36,
-        "heading_size_mobile": 26,
-        "sub_size": 16,
-        "card_title_size": 17,
-        "card_text_size": 13,
-        "hero_text_size": 16,
-        "accent_width": 36,
-        "accent_height": 4,
-        "card_radius": 16,
-        "card_padding": 20,
-        "hero_padding": 24,
-        "card_min_height": 220,
-        "card_min_height_mobile": 180,
-        "grid_gap": 16,
-        "grid_gap_mobile": 12,
-        "header_gap": 12,
-        "grid_top_gap": 36,
-        "padding_top": 64,
-        "padding_bottom": 64,
-        "padding_h": 24
+        "eyebrow": "WATCH & LEARN",
+        "heading": "See Herbishield in Action",
+        "subheading": "Discover quick, practical tips from our plant-care experts and watch real field applications in short, easy videos.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "padding_horizontal": 24
       }
     },
     "testimonial_m7Kq3x": {
@@ -457,62 +517,6 @@
         "speed": 35
       }
     },
-    "video_carousel_Mm8pQ2": {
-      "type": "VideoCarousel",
-      "blocks": {
-        "video_card_1": {
-          "type": "video_card",
-          "settings": {
-            "category": "PLANT CARE",
-            "duration": "2:45",
-            "title": "How to Apply Herbishield in Early Growth Stage",
-            "description": "Step-by-step walkthrough for consistent, safe application in your first crop cycle."
-          }
-        },
-        "video_card_2": {
-          "type": "video_card",
-          "settings": {
-            "category": "FIELD DEMO",
-            "duration": "3:20",
-            "title": "Real Field Results After 7 Days",
-            "description": "See side-by-side crop condition changes and learn what to monitor after treatment."
-          }
-        },
-        "video_card_3": {
-          "type": "video_card",
-          "settings": {
-            "category": "BEST PRACTICE",
-            "duration": "1:58",
-            "title": "Top 5 Mistakes to Avoid During Application",
-            "description": "Improve outcomes by avoiding common dosing and timing mistakes growers make."
-          }
-        },
-        "video_card_4": {
-          "type": "video_card",
-          "settings": {
-            "category": "TIPS",
-            "duration": "2:12",
-            "title": "Mixing Guide for Different Crop Types",
-            "description": "Quick dosage guidance for vegetables, herbs, and fruit crops in one concise reel."
-          }
-        }
-      },
-      "block_order": [
-        "video_card_1",
-        "video_card_2",
-        "video_card_3",
-        "video_card_4"
-      ],
-      "name": "Video Carousel",
-      "settings": {
-        "eyebrow": "WATCH & LEARN",
-        "heading": "See Herbishield in Action",
-        "subheading": "Discover quick, practical tips from our plant-care experts and watch real field applications in short, easy videos.",
-        "padding_top": 72,
-        "padding_bottom": 72,
-        "padding_horizontal": 24
-      }
-    },
     "faq_new_66YpeK": {
       "type": "FaqNew",
       "blocks": {
@@ -561,8 +565,8 @@
   "order": [
     "new_hero_44TX4j",
     "trust_indicator_TC7jed",
-    "new_product_URMeYP",
     "applications_Bx4R9n",
+    "new_product_URMeYP",
     "video_carousel_Mm8pQ2",
     "testimonial_m7Kq3x",
     "faq_new_66YpeK"
