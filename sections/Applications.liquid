@@ -10,7 +10,18 @@
 
     {%- comment -%}── Header ──{%- endcomment -%}
     <div class="ab__header">
-      <span class="ab__accent" aria-hidden="true"></span>
+      <div class="ab__header-mark" aria-hidden="true">
+        <span class="ab__accent"></span>
+        <span class="ab__nature-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 30c0-8 6-14 14-14-1 9-6 14-14 14z" fill="currentColor" opacity=".9"/>
+            <path d="M20 30c0-8-6-14-14-14 1 9 6 14 14 14z" fill="currentColor" opacity=".75"/>
+            <path d="M20 30V11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M20 18c2.5 0 4.5-2 4.5-4.5S22.5 9 20 9s-4.5 2-4.5 4.5S17.5 18 20 18z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="ab__accent"></span>
+      </div>
       {%- if section.settings.heading != blank -%}
         <h2 class="ab__heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
@@ -44,7 +55,7 @@
           {%- else -%}
             {{ 'lifestyle-1' | placeholder_svg_tag: 'ab__card-img ab__card-img--ph' }}
           {%- endif -%}
-          <div class="ab__card-overlay"></div>
+          <div class="ab__card-overlay ab__card-overlay--{{ pos }}"></div>
           <div class="ab__card-content">
             {%- if block.settings.title != blank -%}
               <h3 class="ab__card-title">{{ block.settings.title }}</h3>
@@ -100,8 +111,13 @@
 }
 
 .ab{
-  background:var(--ab-bg);
+  position:relative;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb,var(--ab-accent) 7%,transparent) 0%, transparent 60%),
+    radial-gradient(120% 90% at 100% 100%, color-mix(in srgb,var(--ab-badge-bg) 8%,transparent) 0%, transparent 62%),
+    var(--ab-bg);
   padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  overflow:hidden;
 }
 
 .ab__wrap{
@@ -116,32 +132,61 @@
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:{{ section.settings.header_gap }}px;
+  gap:calc({{ section.settings.header_gap }}px + 2px);
   margin-bottom:{{ section.settings.grid_top_gap }}px;
 }
 
+.ab__header-mark{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
 .ab__accent{
-  width:{{ section.settings.accent_width }}px;
+  width:calc({{ section.settings.accent_width }}px + 10px);
   height:{{ section.settings.accent_height }}px;
   border-radius:99px;
-  background:var(--ab-accent);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--ab-accent) 75%,#ffffff),var(--ab-accent));
+  box-shadow:0 2px 10px color-mix(in srgb,var(--ab-accent) 30%,transparent);
+}
+
+.ab__nature-icon{
+  width:38px;
+  height:38px;
+  border-radius:999px;
+  color:var(--ab-accent);
+  background:color-mix(in srgb,var(--ab-accent) 10%,#ffffff);
+  border:1px solid color-mix(in srgb,var(--ab-accent) 20%,transparent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 18px color-mix(in srgb,var(--ab-accent) 14%,transparent);
+}
+
+.ab__nature-icon svg{
+  width:22px;
+  height:22px;
 }
 
 .ab__heading{
-  font-size:{{ section.settings.heading_size }}px;
-  font-weight:700;
-  line-height:1.2;
-  letter-spacing:-.02em;
+  font-size:clamp(2rem,4vw,{{ section.settings.heading_size }}px);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-.035em;
   color:var(--ab-heading);
   margin:0;
+  max-width:16ch;
+  text-wrap:balance;
 }
 
 .ab__sub{
   font-size:{{ section.settings.sub_size }}px;
-  line-height:1.55;
+  line-height:1.6;
   color:var(--ab-sub);
   margin:0;
-  max-width:560px;
+  max-width:58ch;
+  text-wrap:pretty;
+  opacity:.9;
 }
 
 /* ── Bento Grid ── */
@@ -181,8 +226,27 @@
 .ab__card-overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,.15) 55%,rgba(0,0,0,0) 100%);
   z-index:1;
+}
+.ab__card-overlay--tl{
+  background:
+    linear-gradient(160deg, rgba(8,48,26,.18) 0%, rgba(8,48,26,0) 45%),
+    linear-gradient(to top, rgba(5,28,16,.72) 0%, rgba(5,28,16,.16) 58%, rgba(5,28,16,0) 100%);
+}
+.ab__card-overlay--tr{
+  background:
+    linear-gradient(200deg, rgba(80,58,8,.2) 0%, rgba(80,58,8,0) 48%),
+    linear-gradient(to top, rgba(20,30,18,.72) 0%, rgba(20,30,18,.16) 56%, rgba(20,30,18,0) 100%);
+}
+.ab__card-overlay--bl{
+  background:
+    linear-gradient(140deg, rgba(20,60,40,.2) 0%, rgba(20,60,40,0) 46%),
+    linear-gradient(to top, rgba(8,28,22,.76) 0%, rgba(8,28,22,.18) 58%, rgba(8,28,22,0) 100%);
+}
+.ab__card-overlay--br{
+  background:
+    linear-gradient(215deg, rgba(74,126,47,.18) 0%, rgba(74,126,47,0) 46%),
+    linear-gradient(to top, rgba(14,36,22,.74) 0%, rgba(14,36,22,.16) 56%, rgba(14,36,22,0) 100%);
 }
 
 .ab__card-content{
@@ -233,7 +297,10 @@
 .ab__hero-overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,0) 70%);
+  background:
+    radial-gradient(120% 100% at 80% 10%, rgba(250,204,21,.18) 0%, rgba(250,204,21,0) 44%),
+    linear-gradient(170deg, rgba(12,50,30,.24) 0%, rgba(12,50,30,0) 46%),
+    linear-gradient(to top, rgba(0,0,0,.74) 0%, rgba(0,0,0,.28) 46%, rgba(0,0,0,0) 72%);
   z-index:1;
 }
 
@@ -277,7 +344,10 @@
   .ab__card--tl,.ab__card--tr,.ab__card--bl,.ab__card--br{grid-area:auto;align-self:stretch}
   .ab__hero{grid-column:1/-1;order:-1;min-height:320px}
   .ab__card{height:{{ section.settings.card_min_height_mobile }}px}
-  .ab__heading{font-size:{{ section.settings.heading_size_mobile }}px}
+  .ab__heading{
+    font-size:clamp(1.9rem,7vw,{{ section.settings.heading_size_mobile }}px);
+    line-height:1.12;
+  }
 }
 </style>
 
