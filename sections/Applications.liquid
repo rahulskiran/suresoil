@@ -58,23 +58,21 @@
 
       {%- comment -%}── Center hero card ──{%- endcomment -%}
       <div class="ab__hero">
-        <div class="ab__hero-media">
-          {%- if section.settings.hero_image != blank -%}
-            {{- section.settings.hero_image
-                | image_url: width: 1200
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '600,800,1000,1200',
-                  sizes: '(max-width: 767px) 100vw, 50vw',
-                  class: 'ab__hero-img',
-                  alt: section.settings.hero_heading
-            -}}
-          {%- else -%}
-            {{ 'lifestyle-2' | placeholder_svg_tag: 'ab__hero-img ab__hero-img--ph' }}
-          {%- endif -%}
-          <div class="ab__hero-overlay"></div>
-        </div>
-        <div class="ab__hero-body">
+        {%- if section.settings.hero_image != blank -%}
+          {{- section.settings.hero_image
+              | image_url: width: 1200
+              | image_tag:
+                loading: 'lazy',
+                widths: '600,800,1000,1200',
+                sizes: '(max-width: 767px) 100vw, 50vw',
+                class: 'ab__hero-img',
+                alt: section.settings.hero_heading
+          -}}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'ab__hero-img ab__hero-img--ph' }}
+        {%- endif -%}
+        <div class="ab__hero-overlay"></div>
+        <div class="ab__hero-content">
           {%- if section.settings.hero_badge != blank -%}
             <span class="ab__hero-badge">{{ section.settings.hero_badge }}</span>
           {%- endif -%}
@@ -218,33 +216,33 @@
   overflow:hidden;
   display:flex;
   flex-direction:column;
-}
-
-.ab__hero-media{
-  position:relative;
-  flex:1;
-  min-height:0;
+  justify-content:flex-end;
 }
 
 .ab__hero-img{
+  position:absolute;
+  inset:0;
   width:100%;height:100%;
   object-fit:cover;display:block;
-  position:absolute;inset:0;
+  transition:transform .5s ease;
 }
-.ab__hero-img--ph{position:relative;opacity:.3}
+.ab__hero:hover .ab__hero-img{transform:scale(1.03)}
+.ab__hero-img--ph{opacity:.3}
 
 .ab__hero-overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.3) 0%,transparent 40%);
+  background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,0) 70%);
   z-index:1;
 }
 
-.ab__hero-body{
+.ab__hero-content{
+  position:relative;
+  z-index:2;
   padding:{{ section.settings.hero_padding }}px;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:12px;
 }
 
 .ab__hero-badge{
@@ -263,7 +261,7 @@
 .ab__hero-text{
   font-size:{{ section.settings.hero_text_size }}px;
   line-height:1.5;
-  color:var(--ab-hero-txt);
+  color:#ffffff;
   margin:0;
   max-width:480px;
 }
