@@ -457,6 +457,62 @@
         "speed": 35
       }
     },
+    "video_carousel_Mm8pQ2": {
+      "type": "VideoCarousel",
+      "blocks": {
+        "video_card_1": {
+          "type": "video_card",
+          "settings": {
+            "category": "PLANT CARE",
+            "duration": "2:45",
+            "title": "How to Apply Herbishield in Early Growth Stage",
+            "description": "Step-by-step walkthrough for consistent, safe application in your first crop cycle."
+          }
+        },
+        "video_card_2": {
+          "type": "video_card",
+          "settings": {
+            "category": "FIELD DEMO",
+            "duration": "3:20",
+            "title": "Real Field Results After 7 Days",
+            "description": "See side-by-side crop condition changes and learn what to monitor after treatment."
+          }
+        },
+        "video_card_3": {
+          "type": "video_card",
+          "settings": {
+            "category": "BEST PRACTICE",
+            "duration": "1:58",
+            "title": "Top 5 Mistakes to Avoid During Application",
+            "description": "Improve outcomes by avoiding common dosing and timing mistakes growers make."
+          }
+        },
+        "video_card_4": {
+          "type": "video_card",
+          "settings": {
+            "category": "TIPS",
+            "duration": "2:12",
+            "title": "Mixing Guide for Different Crop Types",
+            "description": "Quick dosage guidance for vegetables, herbs, and fruit crops in one concise reel."
+          }
+        }
+      },
+      "block_order": [
+        "video_card_1",
+        "video_card_2",
+        "video_card_3",
+        "video_card_4"
+      ],
+      "name": "Video Carousel",
+      "settings": {
+        "eyebrow": "WATCH & LEARN",
+        "heading": "See Herbishield in Action",
+        "subheading": "Discover quick, practical tips from our plant-care experts and watch real field applications in short, easy videos.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "padding_horizontal": 24
+      }
+    },
     "faq_new_66YpeK": {
       "type": "FaqNew",
       "blocks": {
@@ -507,6 +563,7 @@
     "trust_indicator_TC7jed",
     "new_product_URMeYP",
     "applications_Bx4R9n",
+    "video_carousel_Mm8pQ2",
     "testimonial_m7Kq3x",
     "faq_new_66YpeK"
   ]
