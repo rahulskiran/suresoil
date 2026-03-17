@@ -125,6 +125,121 @@
         "leaf_opacity": 20
       }
     },
+    "new_product_URMeYP": {
+      "type": "NewProduct",
+      "blocks": {
+        "feature_YUEAAg": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "text": "Broad-spectrum pest defence"
+          }
+        },
+        "feature_pGHQbq": {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "text": "Safe for edible crops"
+          }
+        },
+        "feature_epbfcQ": {
+          "type": "feature",
+          "settings": {
+            "icon": "flask",
+            "text": "Concentrated — dilutes 1:50"
+          }
+        },
+        "size_variant_d6bxca": {
+          "type": "size_variant",
+          "settings": {
+            "label": "250ml",
+            "price": "€14.99",
+            "popular_tag": "",
+            "selected": false
+          }
+        },
+        "size_variant_cTEGdf": {
+          "type": "size_variant",
+          "settings": {
+            "label": "500ml",
+            "price": "€24.99",
+            "popular_tag": "",
+            "selected": false
+          }
+        },
+        "size_variant_HH4Q7q": {
+          "type": "size_variant",
+          "settings": {
+            "label": "1L",
+            "price": "€39.99",
+            "popular_tag": "POPULAR",
+            "selected": true
+          }
+        },
+        "size_variant_xz9jXK": {
+          "type": "size_variant",
+          "settings": {
+            "label": "5L",
+            "price": "€149.99",
+            "popular_tag": "",
+            "selected": false
+          }
+        }
+      },
+      "block_order": [
+        "feature_YUEAAg",
+        "feature_pGHQbq",
+        "feature_epbfcQ",
+        "size_variant_d6bxca",
+        "size_variant_cTEGdf",
+        "size_variant_HH4Q7q",
+        "size_variant_xz9jXK"
+      ],
+      "name": "Product Showcase",
+      "settings": {
+        "bg_color": "#ffffff",
+        "image_circle_color": "#f0f1f3",
+        "heading_color": "#111827",
+        "desc_color": "#6b7280",
+        "feature_icon_color": "#0d7c5f",
+        "feature_text_color": "#374151",
+        "price_color": "#111827",
+        "price_note_color": "#9ca3af",
+        "badge_text": "BEST SELLER",
+        "badge_bg_color": "#0d7c5f",
+        "badge_text_color": "#ffffff",
+        "heading": "Herbishield Concentrated Insecticide",
+        "description": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area with a single application cycle.",
+        "size_label": "Select Size",
+        "card_border_color": "#e5e7eb",
+        "active_border_color": "#1a4d1e",
+        "popular_tag_color": "#0d7c5f",
+        "price": "€39.99",
+        "price_note": "Incl. VAT · Free shipping over €50",
+        "btn_primary_label": "Add to Cart",
+        "btn_primary_url": "",
+        "btn_primary_bg": "#1a4d1e",
+        "btn_primary_text": "#ffffff",
+        "btn_secondary_label": "Learn More",
+        "btn_secondary_url": "",
+        "btn_secondary_border": "#1a4d1e",
+        "btn_secondary_text": "#1a4d1e",
+        "btn_radius": 10,
+        "image_side": "left",
+        "max_width": 1100,
+        "image_col_width": 40,
+        "grid_gap": 48,
+        "info_gap": 22,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_h": 40,
+        "heading_size": 44,
+        "heading_size_mobile": 30,
+        "desc_size": 16,
+        "feat_size": 16,
+        "price_size": 36
+      }
+    },
     "applications_Bx4R9n": {
       "type": "Applications",
       "blocks": {
@@ -174,6 +289,7 @@
         "badge_bg": "#d4a017",
         "badge_text": "#ffffff",
         "heading": "Why Herbishield Works",
+        "subtext": "",
         "hero_badge": "HERBISHIELD FORMULA",
         "hero_heading": "Professional-grade protection that keeps your crops healthy and thriving all season long.",
         "heading_size": 36,
@@ -341,119 +457,48 @@
         "speed": 35
       }
     },
-    "new_product_URMeYP": {
-      "type": "NewProduct",
+    "faq_new_66YpeK": {
+      "type": "FaqNew",
       "blocks": {
-        "feature_YUEAAg": {
-          "type": "feature",
+        "faq_item_7F6abq": {
+          "type": "faq_item",
           "settings": {
-            "icon": "shield",
-            "text": "Broad-spectrum pest defence"
+            "question": "How do I track my order?",
+            "answer": "We will provide you with a tracking number via email once your order is confirmed. You can use this link to monitor your shipment's progress directly via our shipping partner's portal."
           }
         },
-        "feature_pGHQbq": {
-          "type": "feature",
+        "faq_item_8NNqyM": {
+          "type": "faq_item",
           "settings": {
-            "icon": "leaf",
-            "text": "Safe for edible crops"
+            "question": "How do I track shipping?",
+            "answer": "Similar to tracking your order, your shipping tracking number will be provided in your dispatch email, and you can get detailed updates on your shipping partner's website 24/7."
           }
         },
-        "feature_epbfcQ": {
-          "type": "feature",
+        "faq_item_aPcEbr": {
+          "type": "faq_item",
           "settings": {
-            "icon": "flask",
-            "text": "Concentrated — dilutes 1:50"
+            "question": "How do I return any products?",
+            "answer": "Please visit our returns portal and follow the step-by-step instructions. We offer various return methods to make the process as easy and seamless as possible for our customers."
           }
         },
-        "size_variant_d6bxca": {
-          "type": "size_variant",
+        "faq_item_gfQKDY": {
+          "type": "faq_item",
           "settings": {
-            "label": "250ml",
-            "price": "€14.99",
-            "popular_tag": "",
-            "selected": false
-          }
-        },
-        "size_variant_cTEGdf": {
-          "type": "size_variant",
-          "settings": {
-            "label": "500ml",
-            "price": "€24.99",
-            "popular_tag": "",
-            "selected": false
-          }
-        },
-        "size_variant_HH4Q7q": {
-          "type": "size_variant",
-          "settings": {
-            "label": "1L",
-            "price": "€39.99",
-            "popular_tag": "POPULAR",
-            "selected": true
-          }
-        },
-        "size_variant_xz9jXK": {
-          "type": "size_variant",
-          "settings": {
-            "label": "5L",
-            "price": "€149.99",
-            "popular_tag": "",
-            "selected": false
+            "question": "What are the available payment options?",
+            "answer": "We offer multiple secure payment methods including all major Credit Cards, PayPal, Apple Pay, and Google Pay. You can view the full list of options during the checkout process."
           }
         }
       },
       "block_order": [
-        "feature_YUEAAg",
-        "feature_pGHQbq",
-        "feature_epbfcQ",
-        "size_variant_d6bxca",
-        "size_variant_cTEGdf",
-        "size_variant_HH4Q7q",
-        "size_variant_xz9jXK"
+        "faq_item_7F6abq",
+        "faq_item_8NNqyM",
+        "faq_item_aPcEbr",
+        "faq_item_gfQKDY"
       ],
-      "name": "Product Showcase",
+      "name": "Premium FAQ Section",
       "settings": {
-        "bg_color": "#ffffff",
-        "image_circle_color": "#f0f1f3",
-        "heading_color": "#111827",
-        "desc_color": "#6b7280",
-        "feature_icon_color": "#0d7c5f",
-        "feature_text_color": "#374151",
-        "price_color": "#111827",
-        "price_note_color": "#9ca3af",
-        "badge_text": "BEST SELLER",
-        "badge_bg_color": "#0d7c5f",
-        "badge_text_color": "#ffffff",
-        "heading": "Herbishield Concentrated Insecticide",
-        "description": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area with a single application cycle.",
-        "size_label": "Select Size",
-        "card_border_color": "#e5e7eb",
-        "active_border_color": "#1a4d1e",
-        "popular_tag_color": "#0d7c5f",
-        "price": "€39.99",
-        "price_note": "Incl. VAT · Free shipping over €50",
-        "btn_primary_label": "Add to Cart",
-        "btn_primary_url": "",
-        "btn_primary_bg": "#1a4d1e",
-        "btn_primary_text": "#ffffff",
-        "btn_secondary_label": "Learn More",
-        "btn_secondary_url": "",
-        "btn_secondary_border": "#1a4d1e",
-        "btn_secondary_text": "#1a4d1e",
-        "btn_radius": 10,
-        "image_side": "left",
-        "max_width": 1100,
-        "image_col_width": 40,
-        "grid_gap": 48,
-        "info_gap": 22,
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "padding_h": 40,
-        "heading_size": 44,
-        "heading_size_mobile": 30,
-        "desc_size": 16,
-        "feat_size": 16,
-        "price_size": 36
+        "heading": "Frequently Asked Questions",
+        "subheading": "Everything you need to know about the product, shipping, and billing."
       }
     }
   },
@@ -462,6 +507,7 @@
     "trust_indicator_TC7jed",
     "new_product_URMeYP",
     "applications_Bx4R9n",
-    "testimonial_m7Kq3x"
+    "testimonial_m7Kq3x",
+    "faq_new_66YpeK"
   ]
 }
