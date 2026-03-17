@@ -7,73 +7,63 @@
 <section class="vc" id="vc-{{ s_id }}">
   <div class="vc__container">
     <div class="vc__header">
-      <div class="vc__header-copy">
-        <span class="vc__eyebrow">{{ section.settings.eyebrow }}</span>
-        <h2 class="vc__title">{{ section.settings.heading }}</h2>
-        <p class="vc__subtitle">{{ section.settings.subheading }}</p>
-      </div>
-
-      <div class="vc__nav vc__nav--desktop">
-        <button class="vc__nav-btn" type="button" data-vc-nav="left" aria-label="Scroll videos left">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button class="vc__nav-btn" type="button" data-vc-nav="right" aria-label="Scroll videos right">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
+      <span class="vc__eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2 class="vc__title">{{ section.settings.heading }}</h2>
+      <p class="vc__subtitle">{{ section.settings.subheading }}</p>
     </div>
 
-    <div class="vc__track" data-vc-track>
-      {%- for block in section.blocks -%}
-        <article class="vc__card" {{ block.shopify_attributes }}>
-          <a class="vc__media-wrap" href="{{ block.settings.video_url | default: '#' }}">
-            <div class="vc__media">
-              {%- if block.settings.thumbnail != blank -%}
-                {{ block.settings.thumbnail
-                  | image_url: width: 900
-                  | image_tag:
-                    class: 'vc__thumb',
-                    loading: 'lazy',
-                    widths: '360,540,720,900',
-                    sizes: '(max-width: 767px) 240px, (max-width: 991px) 280px, 300px',
-                    alt: block.settings.title
-                }}
-              {%- else -%}
-                {{ 'image' | placeholder_svg_tag: 'vc__thumb vc__thumb--placeholder' }}
-              {%- endif -%}
+    <div class="vc__track-wrap">
+      <button class="vc__nav-btn vc__nav-btn--prev" type="button" data-vc-nav="left" aria-label="Scroll videos left">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
 
-              <div class="vc__gradient"></div>
+      <div class="vc__track" data-vc-track>
+        {%- for block in section.blocks -%}
+          <article class="vc__card" {{ block.shopify_attributes }}>
+            <a class="vc__media-wrap" href="{{ block.settings.video_url | default: '#' }}">
+              <div class="vc__media">
+                {%- if block.settings.thumbnail != blank -%}
+                  {{ block.settings.thumbnail
+                    | image_url: width: 900
+                    | image_tag:
+                      class: 'vc__thumb',
+                      loading: 'lazy',
+                      widths: '360,540,720,900',
+                      sizes: '(max-width: 767px) 240px, (max-width: 991px) 280px, 300px',
+                      alt: block.settings.title
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'vc__thumb vc__thumb--placeholder' }}
+                {%- endif -%}
 
-              {%- if block.settings.category != blank -%}
-                <span class="vc__category">{{ block.settings.category }}</span>
-              {%- endif -%}
+                <div class="vc__gradient"></div>
 
-              <span class="vc__play" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M8 5.5l10 6.5-10 6.5V5.5z" fill="currentColor"/>
-                </svg>
-              </span>
+                <span class="vc__play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5.5l10 6.5-10 6.5V5.5z" fill="currentColor"/>
+                  </svg>
+                </span>
 
-              <span class="vc__duration" aria-label="Video duration">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.75"/>
-                  <path d="M12 7.8v4.6l3.1 1.8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                {{ block.settings.duration }}
-              </span>
+                <span class="vc__duration" aria-label="Video duration">
+                  {{ block.settings.duration }}
+                </span>
+              </div>
+            </a>
+
+            <div class="vc__content">
+              <h3 class="vc__card-title">{{ block.settings.title }}</h3>
             </div>
-          </a>
+          </article>
+        {%- endfor -%}
+      </div>
 
-          <div class="vc__content">
-            <h3 class="vc__card-title">{{ block.settings.title }}</h3>
-            <p class="vc__card-desc">{{ block.settings.description }}</p>
-          </div>
-        </article>
-      {%- endfor -%}
+      <button class="vc__nav-btn vc__nav-btn--next" type="button" data-vc-nav="right" aria-label="Scroll videos right">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
   </div>
 </section>
@@ -82,15 +72,11 @@
   #vc-{{ s_id }} {
     --vc-bg: #ffffff;
     --vc-heading: #14532d;
-    --vc-subheading: #4b5563;
-    --vc-yellow: #facc15;
-    --vc-yellow-ink: #a16207;
-    --vc-yellow-soft: #fef9c3;
-    --vc-green-soft: #f0fdf4;
-    --vc-green-border: #dcfce7;
-    --vc-dark-green: #052e16;
-    --vc-card-title: #14532d;
-    --vc-card-title-hover: #15803d;
+    --vc-text: #6b7280;
+    --vc-accent: #16a34a;
+    --vc-card-bg: #f9fafb;
+    --vc-border: #e5e7eb;
+    --vc-card-title: #1f2937;
   }
 
   #vc-{{ s_id }}.vc {
@@ -105,88 +91,85 @@
   }
 
   #vc-{{ s_id }} .vc__header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 28px;
-  }
-
-  #vc-{{ s_id }} .vc__header-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 760px;
+    text-align: center;
+    margin-bottom: 40px;
   }
 
   #vc-{{ s_id }} .vc__eyebrow {
-    width: fit-content;
-    border-radius: 999px;
-    padding: 7px 12px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--vc-yellow-ink);
-    background: var(--vc-yellow-soft);
+    color: var(--vc-accent);
+    margin-bottom: 12px;
   }
 
   #vc-{{ s_id }} .vc__title {
-    margin: 0;
+    margin: 0 auto 14px;
     color: var(--vc-heading);
     font-family: var(--font-body--family);
-    font-weight: 800;
-    line-height: 1.1;
-    font-size: clamp(1.875rem, 3vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+    max-width: 600px;
   }
 
   #vc-{{ s_id }} .vc__subtitle {
-    margin: 0;
-    color: var(--vc-subheading);
-    font-size: 1.125rem;
+    margin: 0 auto;
+    color: var(--vc-text);
+    font-size: 1rem;
     line-height: 1.6;
-    max-width: 56ch;
+    max-width: 480px;
   }
 
-  #vc-{{ s_id }} .vc__nav {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  #vc-{{ s_id }} .vc__track-wrap {
+    position: relative;
   }
 
   #vc-{{ s_id }} .vc__nav-btn {
-    width: 46px;
-    height: 46px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 40px;
+    height: 40px;
     border-radius: 999px;
-    border: 1px solid var(--vc-green-border);
-    background: #ffffff;
-    color: var(--vc-heading);
+    border: 1px solid var(--vc-border);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(6px);
+    color: var(--vc-card-title);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
   #vc-{{ s_id }} .vc__nav-btn:hover {
-    background: var(--vc-green-soft);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    transform: translateY(-50%) scale(1.05);
   }
 
+  #vc-{{ s_id }} .vc__nav-btn--prev { left: -20px; }
+  #vc-{{ s_id }} .vc__nav-btn--next { right: -20px; }
+
   #vc-{{ s_id }} .vc__nav-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   #vc-{{ s_id }} .vc__track {
     display: flex;
-    gap: 18px;
+    gap: 20px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    padding-bottom: 6px;
+    padding: 4px 0 8px;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    justify-content: center;
   }
 
   #vc-{{ s_id }} .vc__track::-webkit-scrollbar {
@@ -195,23 +178,22 @@
 
   #vc-{{ s_id }} .vc__card {
     flex: 0 0 auto;
-    width: 240px;
-    scroll-snap-align: start;
+    width: 220px;
+    scroll-snap-align: center;
   }
 
   #vc-{{ s_id }} .vc__media-wrap {
     display: block;
     text-decoration: none;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   #vc-{{ s_id }} .vc__media {
     position: relative;
     overflow: hidden;
-    border-radius: 1rem;
-    box-shadow: 0 10px 26px rgba(20, 83, 45, 0.16);
+    border-radius: 14px;
     aspect-ratio: 9 / 16;
-    background: #d1fae5;
+    background: #f3f4f6;
   }
 
   #vc-{{ s_id }} .vc__thumb {
@@ -219,37 +201,22 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.5s ease;
+    transition: transform 0.45s ease;
   }
 
   #vc-{{ s_id }} .vc__thumb--placeholder {
-    opacity: 0.55;
+    opacity: 0.4;
   }
 
   #vc-{{ s_id }} .vc__media:hover .vc__thumb {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
 
   #vc-{{ s_id }} .vc__gradient {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(to top, rgba(5, 46, 22, 0.9) 12%, rgba(5, 46, 22, 0.4) 44%, rgba(5, 46, 22, 0) 70%);
-  }
-
-  #vc-{{ s_id }} .vc__category {
-    position: absolute;
-    left: 12px;
-    top: 12px;
-    border-radius: 999px;
-    padding: 6px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-    background: var(--vc-yellow);
-    color: var(--vc-dark-green);
-    z-index: 2;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 35%, transparent 60%);
   }
 
   #vc-{{ s_id }} .vc__play {
@@ -257,82 +224,59 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 66px;
-    height: 66px;
+    width: 52px;
+    height: 52px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(7px);
-    border: 1px solid rgba(255, 255, 255, 0.44);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
     z-index: 2;
   }
 
   #vc-{{ s_id }} .vc__play svg {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     margin-left: 2px;
   }
 
   #vc-{{ s_id }} .vc__media:hover .vc__play {
-    transform: translate(-50%, -50%) scale(1.1);
-    background: var(--vc-yellow);
-    color: var(--vc-dark-green);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
   }
 
   #vc-{{ s_id }} .vc__duration {
     position: absolute;
     right: 10px;
     bottom: 10px;
-    border-radius: 999px;
-    padding: 4px 8px;
+    border-radius: 6px;
+    padding: 3px 7px;
     font-size: 11px;
+    font-weight: 500;
     color: #ffffff;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(6px);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
     z-index: 2;
   }
 
-  #vc-{{ s_id }} .vc__duration svg {
-    width: 13px;
-    height: 13px;
-  }
-
   #vc-{{ s_id }} .vc__content {
-    padding-right: 10px;
+    text-align: center;
+    padding: 0 4px;
   }
 
   #vc-{{ s_id }} .vc__card-title {
-    margin: 0 0 6px;
-    font-size: 1.25rem;
-    line-height: 1.25;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.35;
     color: var(--vc-card-title);
-    font-weight: 700;
+    font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    transition: color 0.2s ease;
-  }
-
-  #vc-{{ s_id }} .vc__card-title:hover {
-    color: var(--vc-card-title-hover);
-  }
-
-  #vc-{{ s_id }} .vc__card-desc {
-    margin: 0;
-    font-size: 0.875rem;
-    line-height: 1.55;
-    color: var(--vc-subheading);
-    overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -341,29 +285,30 @@
 
   @media screen and (min-width: 768px) {
     #vc-{{ s_id }} .vc__card {
-      width: 280px;
+      width: 240px;
     }
   }
 
   @media screen and (min-width: 992px) {
     #vc-{{ s_id }} .vc__card {
-      width: 300px;
+      width: 260px;
     }
   }
 
   @media screen and (max-width: 767px) {
     #vc-{{ s_id }} .vc__header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 18px;
-      margin-bottom: 22px;
+      margin-bottom: 28px;
     }
 
     #vc-{{ s_id }} .vc__subtitle {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
-    #vc-{{ s_id }} .vc__nav--desktop {
+    #vc-{{ s_id }} .vc__track {
+      justify-content: flex-start;
+    }
+
+    #vc-{{ s_id }} .vc__nav-btn {
       display: none;
     }
   }

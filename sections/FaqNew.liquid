@@ -1,359 +1,492 @@
-{% comment %}
-  Premium FAQ Section
-  Add this file to your sections folder and include it in your templates.
-{% endcomment %}
+{% comment %}FAQ Section — sections/FaqNew.liquid{% endcomment %}
 
-{{ 'faq-section.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s_id = section.id
+  assign faqs = section.blocks | where: 'type', 'faq_item'
+-%}
 
-<style>
-  /* Scoped CSS to ensure it works beautifully on any Shopify theme */
-  .premium-faq-{{ section.id }} {
-    min-height: 100vh;
-    background-color: #F8FAF9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    font-family: system-ui, -apple-system, sans-serif;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-  }
+<section class="fq" id="fq-{{ s_id }}">
+  <div class="fq__wrap">
+    <div class="fq__grid">
 
-  @media (min-width: 768px) {
-    .premium-faq-{{ section.id }} {
-      padding: 2rem;
-      padding-top: 6rem;
-      padding-bottom: 6rem;
-    }
-  }
+      {%- comment -%}── Left: Heading column ──{%- endcomment -%}
+      <div class="fq__heading-col">
+        <div class="fq__heading-inner fq__reveal">
+          {%- if section.settings.eyebrow != blank -%}
+            <span class="fq__eyebrow">{{ section.settings.eyebrow }}</span>
+          {%- endif -%}
 
-  /* Decorative Blur */
-  .faq-blur-bg {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 75%;
-    height: 24rem;
-    background-color: rgba(209, 250, 229, 0.5); /* emerald-100 */
-    filter: blur(120px);
-    border-radius: 9999px;
-    pointer-events: none;
-    z-index: -1;
-  }
+          {%- if section.settings.heading != blank -%}
+            <h2 class="fq__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
 
-  /* Header Styles */
-  .faq-header {
-    text-align: center;
-    margin-bottom: 4rem;
-    position: relative;
-    z-index: 10;
-  }
+          {%- if section.settings.subheading != blank -%}
+            <p class="fq__sub">{{ section.settings.subheading }}</p>
+          {%- endif -%}
 
-  .faq-icon-wrapper {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1rem;
-    background-color: #ffffff;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid #d1fae5;
-    color: #065f46;
-    margin-bottom: 1rem;
-    transform: rotate(-3deg);
-    transition: transform 0.5s ease;
-  }
+          {%- if section.settings.cta_label != blank -%}
+            <a href="{{ section.settings.cta_url | default: '#' }}" class="fq__cta">
+              <svg class="fq__cta-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              {{ section.settings.cta_label }}
+              <svg class="fq__cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
 
-  .faq-icon-wrapper:hover {
-    transform: rotate(0deg);
-  }
-
-  .faq-title {
-    font-size: 2.25rem;
-    line-height: 1.2;
-    font-weight: 700;
-    color: #0f172a;
-    letter-spacing: -0.025em;
-    margin-bottom: 1.25rem;
-    margin-top: 0;
-  }
-
-  @media (min-width: 768px) {
-    .faq-title {
-      font-size: 3rem;
-    }
-  }
-
-  .faq-subtitle {
-    color: #64748b;
-    font-size: 1.125rem;
-    max-width: 36rem;
-    margin: 0 auto;
-    font-weight: 300;
-    line-height: 1.5;
-  }
-
-  /* Card Styles */
-  .faq-card-container {
-    max-width: 56rem;
-    width: 100%;
-    position: relative;
-    z-index: 10;
-  }
-
-  .faq-card-glow {
-    position: absolute;
-    top: -0.25rem;
-    right: -0.25rem;
-    bottom: -0.25rem;
-    left: -0.25rem;
-    background: linear-gradient(to bottom, rgba(250, 204, 21, 0.2), rgba(6, 78, 59, 0.2));
-    border-radius: 2.5rem;
-    filter: blur(20px);
-    opacity: 0.5;
-    z-index: -1;
-  }
-
-  .faq-card {
-    position: relative;
-    background-color: #022c22; /* emerald-950 */
-    border-radius: 2.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
-    border: 1px solid rgba(6, 95, 70, 0.5); /* emerald-800 */
-  }
-
-  .faq-card-highlight {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(52, 211, 153, 0.3), transparent);
-  }
-
-  /* Accordion Items */
-  .faq-item {
-    border-bottom: 1px solid rgba(6, 95, 70, 0.4);
-    transition: all 0.5s ease-in-out;
-  }
-
-  .faq-item:last-child {
-    border-bottom: none;
-  }
-
-  .faq-item:hover {
-    background-color: rgba(6, 78, 59, 0.1);
-  }
-
-  .faq-item.is-open {
-    background-color: rgba(6, 78, 59, 0.3);
-  }
-
-  .faq-question-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-    padding: 1.5rem;
-    gap: 1.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  @media (min-width: 768px) {
-    .faq-question-btn {
-      padding: 2rem;
-    }
-  }
-
-  .faq-question-text {
-    font-size: 1.125rem;
-    font-weight: 500;
-    letter-spacing: 0.025em;
-    color: #ecfdf5; /* emerald-50 */
-    transition: color 0.3s ease;
-    margin: 0;
-  }
-
-  @media (min-width: 768px) {
-    .faq-question-text {
-      font-size: 1.25rem;
-    }
-  }
-
-  .faq-question-btn:hover .faq-question-text {
-    color: #ffffff;
-  }
-
-  .faq-item.is-open .faq-question-text {
-    color: #facc15; /* yellow-400 */
-  }
-
-  .faq-toggle-icon {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(4, 120, 87, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #34d399; /* emerald-400 */
-    transition: all 0.5s ease;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  }
-
-  .faq-question-btn:hover .faq-toggle-icon {
-    border-color: #34d399;
-    background-color: rgba(6, 95, 70, 0.5);
-  }
-
-  .faq-item.is-open .faq-toggle-icon {
-    background-color: #facc15;
-    border-color: #facc15;
-    color: #022c22;
-    transform: rotate(180deg);
-  }
-
-  .faq-toggle-icon svg {
-    transition: stroke-width 0.3s ease;
-  }
-
-  /* Answer Animation (CSS Grid trick for smooth auto-height) */
-  .faq-answer-wrapper {
-    display: grid;
-    grid-template-rows: 0fr;
-    opacity: 0;
-    transition: all 0.5s ease-in-out;
-  }
-
-  .faq-item.is-open .faq-answer-wrapper {
-    grid-template-rows: 1fr;
-    opacity: 1;
-  }
-
-  .faq-answer-inner {
-    overflow: hidden;
-  }
-
-  .faq-answer-text {
-    color: rgba(209, 250, 229, 0.7); /* emerald-100/70 */
-    line-height: 1.625;
-    font-size: 1rem;
-    font-weight: 300;
-    padding: 0 1.5rem 2rem 1.5rem;
-    margin-top: -0.5rem;
-    padding-right: 4rem;
-    margin-bottom: 0;
-  }
-
-  @media (min-width: 768px) {
-    .faq-answer-text {
-      font-size: 1.125rem;
-      padding: 0 2rem 2rem 2rem;
-      padding-right: 6rem;
-    }
-  }
-</style>
-
-<div class="premium-faq-{{ section.id }}">
-  <!-- Premium background decorative blur -->
-  <div class="faq-blur-bg"></div>
-
-  <!-- Header Section -->
-  <div class="faq-header">
-    <div class="faq-icon-wrapper">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-        <path d="M12 17h.01"/>
-      </svg>
-    </div>
-    <h2 class="faq-title">{{ section.settings.heading | escape }}</h2>
-    {% if section.settings.subheading != blank %}
-      <p class="faq-subtitle">{{ section.settings.subheading | escape }}</p>
-    {% endif %}
-  </div>
-
-  <!-- Premium FAQ Card -->
-  <div class="faq-card-container">
-    <div class="faq-card-glow"></div>
-    
-    <div class="faq-card">
-      <div class="faq-card-highlight"></div>
-      
-      <div class="faq-list">
-        {% for block in section.blocks %}
-          <div class="faq-item {% if forloop.first %}is-open{% endif %}" {{ block.shopify_attributes }}>
-            <button class="faq-question-btn" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
-              <h3 class="faq-question-text">{{ block.settings.question | escape }}</h3>
-              
-              <div class="faq-toggle-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{% if forloop.first %}2.5{% else %}2{% endif %}" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m6 9 6 6 6-6"/>
-                </svg>
-              </div>
+      {%- comment -%}── Right: Accordion column ──{%- endcomment -%}
+      <div class="fq__accordion-col">
+        {%- for block in faqs -%}
+          <div class="fq__item fq__reveal{% if forloop.first %} fq__item--open{% endif %}" {{ block.shopify_attributes }}>
+            <button class="fq__btn" type="button" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+              <span class="fq__num">{{ forloop.index | prepend: '00' | slice: -2, 2 }}</span>
+              <span class="fq__question">{{ block.settings.question | escape }}</span>
+              <span class="fq__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              </span>
             </button>
-            
-            <div class="faq-answer-wrapper">
-              <div class="faq-answer-inner">
-                <p class="faq-answer-text">
-                  {{ block.settings.answer | escape }}
-                </p>
+            <div class="fq__answer-wrap">
+              <div class="fq__answer-inner">
+                <p class="fq__answer">{{ block.settings.answer | escape }}</p>
               </div>
             </div>
           </div>
-        {% endfor %}
+        {%- endfor -%}
       </div>
+
     </div>
   </div>
-</div>
+</section>
+
+<style>
+#fq-{{ s_id }}{
+  --fq-bg:{{ section.settings.bg_color }};
+  --fq-heading:{{ section.settings.heading_color }};
+  --fq-sub:{{ section.settings.subtext_color }};
+  --fq-eyebrow-bg:{{ section.settings.eyebrow_bg }};
+  --fq-eyebrow-txt:{{ section.settings.eyebrow_text }};
+  --fq-border:{{ section.settings.border_color }};
+  --fq-num:{{ section.settings.number_color }};
+  --fq-q:{{ section.settings.question_color }};
+  --fq-a:{{ section.settings.answer_color }};
+  --fq-icon:{{ section.settings.icon_color }};
+  --fq-active:{{ section.settings.active_color }};
+  --fq-cta-bg:{{ section.settings.cta_bg }};
+  --fq-cta-txt:{{ section.settings.cta_text }};
+  --fq-accent:{{ section.settings.accent_color }};
+}
+
+.fq{
+  position:relative;
+  background:
+    radial-gradient(70% 50% at 10% 80%, color-mix(in srgb,var(--fq-accent) 5%,transparent) 0%, transparent 100%),
+    radial-gradient(60% 40% at 90% 20%, color-mix(in srgb,var(--fq-active) 4%,transparent) 0%, transparent 100%),
+    var(--fq-bg);
+  padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  overflow:hidden;
+}
+
+.fq__wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 {{ section.settings.padding_h }}px;
+}
+
+.fq__grid{
+  display:flex;
+  gap:{{ section.settings.grid_gap }}px;
+  align-items:flex-start;
+}
+
+/* ── Heading column ── */
+.fq__heading-col{
+  flex:0 0 38%;
+  max-width:38%;
+  position:sticky;
+  top:100px;
+}
+
+.fq__heading-inner{
+  display:flex;
+  flex-direction:column;
+  gap:{{ section.settings.heading_gap }}px;
+}
+
+.fq__eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:fit-content;
+  padding:5px 14px;
+  border-radius:999px;
+  background:var(--fq-eyebrow-bg);
+  color:var(--fq-eyebrow-txt);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  line-height:1;
+}
+
+.fq__heading{
+  font-size:clamp(1.75rem,3.8vw,{{ section.settings.heading_size }}px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-.03em;
+  color:var(--fq-heading);
+  margin:0;
+  max-width:16ch;
+  text-wrap:balance;
+}
+
+.fq__sub{
+  font-size:{{ section.settings.sub_size }}px;
+  line-height:1.65;
+  color:var(--fq-sub);
+  margin:0;
+  max-width:36ch;
+  text-wrap:pretty;
+}
+
+.fq__cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 24px;
+  border-radius:12px;
+  background:var(--fq-cta-bg);
+  color:var(--fq-cta-txt);
+  font-size:14px;
+  font-weight:700;
+  text-decoration:none;
+  white-space:nowrap;
+  margin-top:8px;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.fq__cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 28px color-mix(in srgb,var(--fq-cta-bg) 30%,transparent);
+}
+.fq__cta-ico{width:18px;height:18px;flex-shrink:0;opacity:.8}
+.fq__cta-arrow{width:16px;height:16px;flex-shrink:0;transition:transform .25s ease}
+.fq__cta:hover .fq__cta-arrow{transform:translateX(3px)}
+
+/* ── Accordion column ── */
+.fq__accordion-col{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.fq__item{
+  border-bottom:1px solid var(--fq-border);
+}
+.fq__item:first-child{
+  border-top:1px solid var(--fq-border);
+}
+
+.fq__btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  text-align:left;
+  padding:22px 0;
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  transition:padding .3s ease;
+}
+
+.fq__num{
+  flex-shrink:0;
+  font-size:13px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  color:var(--fq-num);
+  opacity:.5;
+  min-width:24px;
+  transition:color .3s ease,opacity .3s ease;
+}
+
+.fq__question{
+  flex:1;
+  font-size:{{ section.settings.question_size }}px;
+  font-weight:600;
+  color:var(--fq-q);
+  line-height:1.35;
+  transition:color .3s ease;
+}
+
+.fq__icon{
+  flex-shrink:0;
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  border:1px solid var(--fq-border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--fq-icon);
+  transition:all .35s ease;
+}
+.fq__icon svg{
+  width:16px;
+  height:16px;
+  transition:transform .35s ease;
+}
+
+.fq__btn:hover .fq__question{color:var(--fq-active)}
+.fq__btn:hover .fq__num{color:var(--fq-active);opacity:.7}
+.fq__btn:hover .fq__icon{
+  border-color:color-mix(in srgb,var(--fq-active) 40%,var(--fq-border));
+  background:color-mix(in srgb,var(--fq-active) 6%,transparent);
+}
+
+/* Open state */
+.fq__item--open .fq__num{color:var(--fq-active);opacity:1}
+.fq__item--open .fq__question{color:var(--fq-active)}
+.fq__item--open .fq__icon{
+  background:var(--fq-active);
+  border-color:var(--fq-active);
+  color:#fff;
+}
+.fq__item--open .fq__icon svg{transform:rotate(45deg)}
+
+/* Answer animation — CSS grid for smooth auto-height */
+.fq__answer-wrap{
+  display:grid;
+  grid-template-rows:0fr;
+  opacity:0;
+  transition:grid-template-rows .4s ease,opacity .35s ease;
+}
+
+.fq__item--open .fq__answer-wrap{
+  grid-template-rows:1fr;
+  opacity:1;
+}
+
+.fq__answer-inner{
+  overflow:hidden;
+}
+
+.fq__answer{
+  color:var(--fq-a);
+  line-height:1.7;
+  font-size:{{ section.settings.answer_size }}px;
+  font-weight:400;
+  padding:0 48px 24px 40px;
+  margin:0;
+}
+
+/* ── Scroll reveal ── */
+.fq__reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.fq__revealed{opacity:1;transform:translateY(0)}
+.fq__accordion-col .fq__reveal:nth-child(1){transition-delay:.08s}
+.fq__accordion-col .fq__reveal:nth-child(2){transition-delay:.14s}
+.fq__accordion-col .fq__reveal:nth-child(3){transition-delay:.2s}
+.fq__accordion-col .fq__reveal:nth-child(4){transition-delay:.26s}
+.fq__accordion-col .fq__reveal:nth-child(5){transition-delay:.32s}
+.fq__accordion-col .fq__reveal:nth-child(6){transition-delay:.38s}
+.fq__accordion-col .fq__reveal:nth-child(7){transition-delay:.44s}
+.fq__accordion-col .fq__reveal:nth-child(8){transition-delay:.5s}
+
+/* ── Tablet ── */
+@media(max-width:991px) and (min-width:768px){
+  .fq__grid{gap:32px}
+  .fq__heading-col{flex:0 0 34%;max-width:34%}
+  .fq__heading{font-size:clamp(1.5rem,3.2vw,{{ section.settings.heading_size | minus: 6 }}px)}
+  .fq__question{font-size:{{ section.settings.question_size | minus: 1 }}px}
+}
+
+/* ── Mobile ── */
+@media(max-width:767px){
+  .fq{padding:{{ section.settings.padding_top | divided_by: 2 }}px 0 {{ section.settings.padding_bottom | divided_by: 2 }}px}
+  .fq__grid{
+    flex-direction:column;
+    gap:32px;
+  }
+  .fq__heading-col{
+    flex:none;
+    max-width:none;
+    width:100%;
+    position:static;
+    text-align:center;
+  }
+  .fq__heading-inner{align-items:center}
+  .fq__heading{
+    font-size:clamp(1.5rem,6.5vw,{{ section.settings.heading_size_mobile }}px);
+    max-width:none;
+    text-align:center;
+  }
+  .fq__sub{
+    font-size:15px;
+    max-width:none;
+    text-align:center;
+  }
+  .fq__btn{padding:18px 0;gap:12px}
+  .fq__num{font-size:12px;min-width:20px}
+  .fq__question{font-size:15px}
+  .fq__answer{
+    font-size:14px;
+    padding:0 32px 20px 32px;
+  }
+  .fq__icon{width:28px;height:28px;border-radius:6px}
+  .fq__icon svg{width:14px;height:14px}
+  .fq__reveal{opacity:1;transform:none;transition:none}
+}
+</style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Isolate logic to this specific section in case of multiple FAQ sections
-    const section = document.querySelector('.premium-faq-{{ section.id }}');
-    if (!section) return;
+(function(){
+  function initFQ(){
+    var sec=document.getElementById('fq-{{ s_id }}');
+    if(!sec)return;
 
-    const faqItems = section.querySelectorAll('.faq-item');
+    var items=sec.querySelectorAll('.fq__item');
 
-    faqItems.forEach((item) => {
-      const btn = item.querySelector('.faq-question-btn');
-      
-      btn.addEventListener('click', () => {
-        const isOpen = item.classList.contains('is-open');
+    items.forEach(function(item){
+      var btn=item.querySelector('.fq__btn');
+      btn.addEventListener('click',function(){
+        var isOpen=item.classList.contains('fq__item--open');
 
-        // Close all items (Accordion style behavior)
-        faqItems.forEach(otherItem => {
-          otherItem.classList.remove('is-open');
-          const otherBtn = otherItem.querySelector('.faq-question-btn');
-          otherBtn.setAttribute('aria-expanded', 'false');
-          otherBtn.querySelector('.faq-toggle-icon svg').setAttribute('stroke-width', '2');
+        items.forEach(function(other){
+          other.classList.remove('fq__item--open');
+          other.querySelector('.fq__btn').setAttribute('aria-expanded','false');
         });
 
-        // Open the clicked item if it wasn't already open
-        if (!isOpen) {
-          item.classList.add('is-open');
-          btn.setAttribute('aria-expanded', 'true');
-          btn.querySelector('.faq-toggle-icon svg').setAttribute('stroke-width', '2.5');
+        if(!isOpen){
+          item.classList.add('fq__item--open');
+          btn.setAttribute('aria-expanded','true');
         }
       });
     });
-  });
+
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){e.target.classList.add('fq__revealed');io.unobserve(e.target)}
+        });
+      },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+      sec.querySelectorAll('.fq__reveal').forEach(function(el){io.observe(el)});
+    }else{
+      sec.querySelectorAll('.fq__reveal').forEach(function(el){el.classList.add('fq__revealed')});
+    }
+  }
+
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initFQ)}else{initFQ()}
+  document.addEventListener('shopify:section:load',function(e){if(e.target.querySelector('#fq-{{ s_id }}'))initFQ()});
+})();
 </script>
 
 {% schema %}
 {
-  "name": "Premium FAQ Section",
+  "name": "FAQ Section",
+  "tag": "section",
+  "class": "faq-section",
   "settings": [
+
+    { "type": "header", "content": "─── Colors ───────────────────────" },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext Color",
+      "default": "#6b7280"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Background Accent",
+      "default": "#0d7c5f"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_bg",
+      "label": "Eyebrow Badge Background",
+      "default": "#efe7b0"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Badge Text",
+      "default": "#a16207"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Divider / Border Color",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "color",
+      "id": "number_color",
+      "label": "Number Color",
+      "default": "#0d7c5f"
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Question Color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Answer Color",
+      "default": "#6b7280"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Toggle Icon Color",
+      "default": "#6b7280"
+    },
+    {
+      "type": "color",
+      "id": "active_color",
+      "label": "Active / Highlight Color",
+      "default": "#1a4d1e"
+    },
+
+    { "type": "header", "content": "─── CTA Button ───────────────────" },
+    {
+      "type": "color",
+      "id": "cta_bg",
+      "label": "CTA Background",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "color",
+      "id": "cta_text",
+      "label": "CTA Text Color",
+      "default": "#ffffff"
+    },
+
+    { "type": "header", "content": "─── Content ──────────────────────" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Badge",
+      "default": "Support"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -364,8 +497,95 @@
       "type": "textarea",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Everything you need to know about the product, shipping, and billing."
+      "default": "Everything you need to know about our products, shipping, and billing. Can't find what you're looking for?"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA Button Label",
+      "default": "Contact Support",
+      "info": "Leave blank to hide"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Button URL"
+    },
+
+    { "type": "header", "content": "─── Typography ───────────────────" },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading — Desktop (px)",
+      "min": 24, "max": 56, "step": 2,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading — Mobile (px)",
+      "min": 22, "max": 40, "step": 2,
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "Subtext Size (px)",
+      "min": 14, "max": 20, "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "question_size",
+      "label": "Question Size (px)",
+      "min": 15, "max": 22, "step": 1,
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "answer_size",
+      "label": "Answer Size (px)",
+      "min": 14, "max": 18, "step": 1,
+      "default": 15
+    },
+
+    { "type": "header", "content": "─── Layout ───────────────────────" },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Column Gap (px)",
+      "min": 24, "max": 80, "step": 4,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "heading_gap",
+      "label": "Heading Content Gap (px)",
+      "min": 8, "max": 32, "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Section Padding Top (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Section Padding Bottom (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_h",
+      "label": "Horizontal Padding (px)",
+      "min": 16, "max": 80, "step": 4,
+      "default": 24
     }
+
   ],
   "blocks": [
     {
@@ -389,12 +609,13 @@
   ],
   "presets": [
     {
-      "name": "Premium FAQ Section",
+      "name": "FAQ Section",
       "blocks": [
-        { "type": "faq_item" },
+        { "type": "faq_item", "settings": { "question": "How do I track my order?", "answer": "We will provide you with a tracking number via email once your order is confirmed. You can use this link to monitor your shipment's progress directly via our shipping partner's portal." } },
         { "type": "faq_item", "settings": { "question": "How do I track shipping?", "answer": "Similar to tracking your order, your shipping tracking number will be provided in your dispatch email, and you can get detailed updates on your shipping partner's website 24/7." } },
         { "type": "faq_item", "settings": { "question": "How do I return any products?", "answer": "Please visit our returns portal and follow the step-by-step instructions. We offer various return methods to make the process as easy and seamless as possible for our customers." } },
-        { "type": "faq_item", "settings": { "question": "What are the available payment options?", "answer": "We offer multiple secure payment methods including all major Credit Cards, PayPal, Apple Pay, and Google Pay. You can view the full list of options during the checkout process." } }
+        { "type": "faq_item", "settings": { "question": "What are the available payment options?", "answer": "We offer multiple secure payment methods including all major Credit Cards, PayPal, Apple Pay, and Google Pay. You can view the full list of options during the checkout process." } },
+        { "type": "faq_item", "settings": { "question": "Is the product safe for all crop types?", "answer": "Yes, our formulation is designed to be safe for a wide range of crops including vegetables, fruits, and ornamental plants. Always follow the recommended dilution ratios on the label for best results." } }
       ]
     }
   ]
