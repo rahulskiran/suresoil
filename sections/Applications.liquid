@@ -10,18 +10,9 @@
 
     {%- comment -%}── Header ──{%- endcomment -%}
     <div class="ab__header">
-      <div class="ab__header-mark" aria-hidden="true">
-        <span class="ab__accent"></span>
-        <span class="ab__nature-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 30c0-8 6-14 14-14-1 9-6 14-14 14z" fill="currentColor" opacity=".9"/>
-            <path d="M20 30c0-8-6-14-14-14 1 9 6 14 14 14z" fill="currentColor" opacity=".75"/>
-            <path d="M20 30V11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M20 18c2.5 0 4.5-2 4.5-4.5S22.5 9 20 9s-4.5 2-4.5 4.5S17.5 18 20 18z" fill="currentColor"/>
-          </svg>
-        </span>
-        <span class="ab__accent"></span>
-      </div>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="ab__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
       {%- if section.settings.heading != blank -%}
         <h2 class="ab__heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
@@ -106,6 +97,8 @@
   --ab-card-txt:{{ section.settings.card_text_color }};
   --ab-badge-bg:{{ section.settings.badge_bg }};
   --ab-badge-txt:{{ section.settings.badge_text }};
+  --ab-eyebrow-bg:{{ section.settings.eyebrow_bg }};
+  --ab-eyebrow-txt:{{ section.settings.eyebrow_text_color }};
   --ab-hero-txt:{{ section.settings.hero_text_color }};
   --ab-radius:{{ section.settings.card_radius }}px;
 }
@@ -136,36 +129,20 @@
   margin-bottom:{{ section.settings.grid_top_gap }}px;
 }
 
-.ab__header-mark{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.ab__accent{
-  width:calc({{ section.settings.accent_width }}px + 10px);
-  height:{{ section.settings.accent_height }}px;
-  border-radius:99px;
-  background:linear-gradient(90deg,color-mix(in srgb,var(--ab-accent) 75%,#ffffff),var(--ab-accent));
-  box-shadow:0 2px 10px color-mix(in srgb,var(--ab-accent) 30%,transparent);
-}
-
-.ab__nature-icon{
-  width:38px;
-  height:38px;
-  border-radius:999px;
-  color:var(--ab-accent);
-  background:color-mix(in srgb,var(--ab-accent) 10%,#ffffff);
-  border:1px solid color-mix(in srgb,var(--ab-accent) 20%,transparent);
-  display:flex;
+.ab__eyebrow{
+  display:inline-flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 8px 18px color-mix(in srgb,var(--ab-accent) 14%,transparent);
-}
-
-.ab__nature-icon svg{
-  width:22px;
-  height:22px;
+  width:fit-content;
+  padding:12px 30px;
+  border-radius:999px;
+  background:var(--ab-eyebrow-bg);
+  color:var(--ab-eyebrow-txt);
+  font-size:clamp(13px,1.6vw,16px);
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  line-height:1;
 }
 
 .ab__heading{
@@ -348,6 +325,10 @@
     font-size:clamp(1.9rem,7vw,{{ section.settings.heading_size_mobile }}px);
     line-height:1.12;
   }
+  .ab__eyebrow{
+    padding:10px 22px;
+    letter-spacing:.14em;
+  }
 }
 </style>
 
@@ -385,6 +366,18 @@
     },
     {
       "type": "color",
+      "id": "eyebrow_bg",
+      "label": "Small Heading Tag Background",
+      "default": "#efe7b0"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_text_color",
+      "label": "Small Heading Tag Text Color",
+      "default": "#a16207"
+    },
+    {
+      "type": "color",
       "id": "card_text_color",
       "label": "Card Text Color",
       "default": "#ffffff"
@@ -409,6 +402,12 @@
     },
 
     { "type": "header", "content": "─── Header Content ───────────────" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small Heading Tag",
+      "default": "WATCH & LEARN"
+    },
     {
       "type": "text",
       "id": "heading",
