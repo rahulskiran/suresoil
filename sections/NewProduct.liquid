@@ -1,0 +1,721 @@
+{% comment %}Product Showcase — sections/NewProduct.liquid v1.0{% endcomment %}
+
+{%- liquid
+  assign s_id = section.id
+-%}
+
+<section class="np" id="np-{{ s_id }}">
+  <div class="np__grid">
+
+    {%- comment -%}── Left: Product image ──{%- endcomment -%}
+    <div class="np__img-col">
+      <div class="np__img-circle">
+        {%- if section.settings.product_image != blank -%}
+          {{- section.settings.product_image
+              | image_url: width: 900
+              | image_tag:
+                loading: 'lazy',
+                widths: '400,600,900',
+                sizes: '(max-width: 767px) 80vw, 40vw',
+                class: 'np__product-img',
+                alt: section.settings.heading
+          -}}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'np__product-img np__product-img--ph' }}
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%}── Right: Product info ──{%- endcomment -%}
+    <div class="np__info-col">
+
+      {%- if section.settings.badge_text != blank -%}
+        <div class="np__badge">
+          <svg class="np__badge-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <span>{{ section.settings.badge_text }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="np__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <p class="np__desc">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      {%- assign features = section.blocks | where: 'type', 'feature' -%}
+      {%- if features.size > 0 -%}
+        <ul class="np__features">
+          {%- for block in features -%}
+            <li class="np__feat" {{ block.shopify_attributes }}>
+              <span class="np__feat-icon">
+                {%- case block.settings.icon -%}
+                  {%- when 'shield' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                  {%- when 'leaf' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-3.8 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                  {%- when 'flask' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M12 3v7.4a2 2 0 0 1-.5 1.3L5 19a2 2 0 0 0 1.5 3h11a2 2 0 0 0 1.5-3l-6.5-7.3a2 2 0 0 1-.5-1.3V3"/></svg>
+                  {%- when 'droplet' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+                {%- endcase -%}
+              </span>
+              <span class="np__feat-text">{{ block.settings.text }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- assign variants = section.blocks | where: 'type', 'size_variant' -%}
+      {%- if variants.size > 0 -%}
+        <div class="np__sizes">
+          <p class="np__sizes-label">{{ section.settings.size_label }}</p>
+          <div class="np__sizes-grid">
+            {%- for block in variants -%}
+              <button
+                class="np__size{% if block.settings.selected %} np__size--active{% endif %}"
+                type="button"
+                data-price="{{ block.settings.price }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.popular_tag != blank -%}
+                  <span class="np__size-tag">{{ block.settings.popular_tag }}</span>
+                {%- endif -%}
+                <span class="np__size-name">{{ block.settings.label }}</span>
+                <span class="np__size-price">{{ block.settings.price }}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="np__bottom">
+        <div class="np__pricing">
+          {%- if section.settings.price != blank -%}
+            <p class="np__price">{{ section.settings.price }}</p>
+          {%- endif -%}
+          {%- if section.settings.price_note != blank -%}
+            <p class="np__price-note">{{ section.settings.price_note }}</p>
+          {%- endif -%}
+        </div>
+        <div class="np__ctas">
+          {%- if section.settings.btn_primary_label != blank -%}
+            <a href="{{ section.settings.btn_primary_url | default: '#' }}" class="np__btn np__btn--p">
+              {{ section.settings.btn_primary_label }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.btn_secondary_label != blank -%}
+            <a href="{{ section.settings.btn_secondary_url | default: '#' }}" class="np__btn np__btn--s">
+              {{ section.settings.btn_secondary_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+#np-{{ s_id }}{
+  --np-bg:{{ section.settings.bg_color }};
+  --np-circle:{{ section.settings.image_circle_color }};
+  --np-badge:{{ section.settings.badge_bg_color }};
+  --np-badge-txt:{{ section.settings.badge_text_color }};
+  --np-heading:{{ section.settings.heading_color }};
+  --np-desc:{{ section.settings.desc_color }};
+  --np-icon:{{ section.settings.feature_icon_color }};
+  --np-feat:{{ section.settings.feature_text_color }};
+  --np-border:{{ section.settings.card_border_color }};
+  --np-active:{{ section.settings.active_border_color }};
+  --np-tag:{{ section.settings.popular_tag_color }};
+  --np-price:{{ section.settings.price_color }};
+  --np-note:{{ section.settings.price_note_color }};
+  --np-btn-bg:{{ section.settings.btn_primary_bg }};
+  --np-btn-txt:{{ section.settings.btn_primary_text }};
+  --np-btn2-border:{{ section.settings.btn_secondary_border }};
+  --np-btn2-txt:{{ section.settings.btn_secondary_text }};
+}
+
+.np{
+  background:var(--np-bg);
+  padding:{{ section.settings.padding_top }}px {{ section.settings.padding_h }}px {{ section.settings.padding_bottom }}px;
+}
+
+.np__grid{
+  max-width:{{ section.settings.max_width }}px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:{{ section.settings.grid_gap }}px;
+  {%- if section.settings.image_side == 'right' -%}flex-direction:row-reverse;{%- endif -%}
+}
+
+/* ── Image column ── */
+.np__img-col{
+  flex:0 0 {{ section.settings.image_col_width }}%;
+  max-width:{{ section.settings.image_col_width }}%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.np__img-circle{
+  position:relative;
+  width:100%;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  background:var(--np-circle);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+}
+.np__product-img{
+  position:relative;
+  width:75%;
+  height:auto;
+  max-height:110%;
+  object-fit:contain;
+  display:block;
+  z-index:1;
+  filter:drop-shadow(0 12px 24px rgba(0,0,0,.1));
+}
+.np__product-img--ph{width:60%;opacity:.4}
+
+/* ── Info column ── */
+.np__info-col{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:{{ section.settings.info_gap }}px;
+}
+
+/* ── Badge ── */
+.np__badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:fit-content;
+  padding:6px 16px;
+  border-radius:999px;
+  background:var(--np-badge);
+  color:var(--np-badge-txt);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+.np__badge-icon{width:14px;height:14px;flex-shrink:0}
+
+/* ── Heading ── */
+.np__heading{
+  font-size:{{ section.settings.heading_size }}px;
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-.02em;
+  color:var(--np-heading);
+  margin:0;
+}
+
+/* ── Description ── */
+.np__desc{
+  font-size:{{ section.settings.desc_size }}px;
+  line-height:1.65;
+  color:var(--np-desc);
+  margin:0;
+  max-width:540px;
+}
+
+/* ── Features ── */
+.np__features{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.np__feat{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.np__feat-icon{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:color-mix(in srgb,var(--np-icon) 12%,transparent);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.np__feat-icon svg{width:20px;height:20px;color:var(--np-icon)}
+.np__feat-text{
+  font-size:{{ section.settings.feat_size }}px;
+  font-weight:500;
+  color:var(--np-feat);
+}
+
+/* ── Size variants ── */
+.np__sizes{display:flex;flex-direction:column;gap:10px}
+.np__sizes-label{margin:0;font-size:15px;font-weight:700;color:var(--np-heading)}
+.np__sizes-grid{display:flex;flex-wrap:wrap;gap:10px}
+.np__size{
+  position:relative;
+  min-width:80px;
+  padding:14px 18px 12px;
+  border:2px solid var(--np-border);
+  border-radius:12px;
+  background:transparent;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.np__size:hover{border-color:color-mix(in srgb,var(--np-active) 50%,var(--np-border))}
+.np__size--active{border-color:var(--np-active);box-shadow:0 0 0 1px var(--np-active)}
+.np__size-tag{
+  position:absolute;
+  top:-10px;left:50%;transform:translateX(-50%);
+  padding:2px 10px;
+  border-radius:999px;
+  background:var(--np-tag);
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.np__size-name{font-size:15px;font-weight:700;color:var(--np-heading)}
+.np__size-price{font-size:13px;font-weight:600;color:var(--np-active)}
+
+/* ── Bottom: price + CTAs ── */
+.np__bottom{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:20px;
+  padding-top:8px;
+  border-top:1px solid color-mix(in srgb,var(--np-border) 60%,transparent);
+}
+.np__pricing{display:flex;flex-direction:column;gap:2px}
+.np__price{margin:0;font-size:{{ section.settings.price_size }}px;font-weight:800;color:var(--np-price);letter-spacing:-.02em}
+.np__price-note{margin:0;font-size:13px;color:var(--np-note)}
+.np__ctas{display:flex;gap:10px;margin-left:auto}
+.np__btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:14px 28px;
+  border-radius:{{ section.settings.btn_radius }}px;
+  font-size:15px;font-weight:700;
+  text-decoration:none;white-space:nowrap;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.np__btn:hover{transform:translateY(-2px)}
+.np__btn--p{
+  background:var(--np-btn-bg);color:var(--np-btn-txt);border:2px solid var(--np-btn-bg);
+}
+.np__btn--p:hover{box-shadow:0 8px 22px color-mix(in srgb,var(--np-btn-bg) 35%,transparent)}
+.np__btn--s{
+  background:transparent;color:var(--np-btn2-txt);border:2px solid var(--np-btn2-border);
+}
+.np__btn--s:hover{background:color-mix(in srgb,var(--np-btn2-border) 8%,transparent)}
+
+/* ── Mobile ── */
+@media(max-width:767px){
+  .np__grid{flex-direction:column;gap:32px}
+  .np__img-col{max-width:320px;width:100%}
+  .np__bottom{flex-direction:column;align-items:flex-start}
+  .np__ctas{margin-left:0;width:100%}
+  .np__btn{flex:1;text-align:center}
+  .np__heading{font-size:{{ section.settings.heading_size_mobile }}px}
+  .np__sizes-grid{width:100%}
+  .np__size{flex:1;min-width:70px}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var section = document.getElementById('np-{{ s_id }}');
+  if (!section) return;
+  section.querySelectorAll('.np__size').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      section.querySelectorAll('.np__size--active').forEach(function (el) {
+        el.classList.remove('np__size--active');
+      });
+      btn.classList.add('np__size--active');
+      var price = btn.getAttribute('data-price');
+      var priceEl = section.querySelector('.np__price');
+      if (priceEl && price) priceEl.textContent = price;
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Product Showcase",
+  "tag": "section",
+  "class": "product-showcase-section",
+  "settings": [
+
+    { "type": "header", "content": "─── Colors ───────────────────────" },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "image_circle_color",
+      "label": "Image Circle Background",
+      "default": "#f0f1f3"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Description Color",
+      "default": "#6b7280"
+    },
+    {
+      "type": "color",
+      "id": "feature_icon_color",
+      "label": "Feature Icon Color",
+      "default": "#0d7c5f"
+    },
+    {
+      "type": "color",
+      "id": "feature_text_color",
+      "label": "Feature Text Color",
+      "default": "#374151"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price Color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "price_note_color",
+      "label": "Price Note Color",
+      "default": "#9ca3af"
+    },
+
+    { "type": "header", "content": "─── Badge ────────────────────────" },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "BEST SELLER"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background",
+      "default": "#0d7c5f"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#ffffff"
+    },
+
+    { "type": "header", "content": "─── Content ──────────────────────" },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image",
+      "info": "Recommended: transparent PNG, 900px wide"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Herbishield Concentrated Insecticide"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Professional-grade formula that eliminates mites, aphids, and whitefly on contact. One bottle protects up to 500m² of crop area with a single application cycle."
+    },
+
+    { "type": "header", "content": "─── Sizing ───────────────────────" },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Size Selector Label",
+      "default": "Select Size"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Size Card Border",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "color",
+      "id": "active_border_color",
+      "label": "Active Size Border",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "color",
+      "id": "popular_tag_color",
+      "label": "Popular Tag Background",
+      "default": "#0d7c5f"
+    },
+
+    { "type": "header", "content": "─── Pricing & CTAs ───────────────" },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "Display Price",
+      "default": "€39.99"
+    },
+    {
+      "type": "text",
+      "id": "price_note",
+      "label": "Price Note",
+      "default": "Incl. VAT · Free shipping over €50"
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_label",
+      "label": "Primary Button Label",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "url",
+      "id": "btn_primary_url",
+      "label": "Primary Button URL"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_bg",
+      "label": "Primary Button Background",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_text",
+      "label": "Primary Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "btn_secondary_label",
+      "label": "Secondary Button Label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "btn_secondary_url",
+      "label": "Secondary Button URL"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_border",
+      "label": "Secondary Button Border",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_text",
+      "label": "Secondary Button Text",
+      "default": "#1a4d1e"
+    },
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "label": "Button Border Radius (px)",
+      "min": 0, "max": 30, "step": 2,
+      "default": 10
+    },
+
+    { "type": "header", "content": "─── Layout ───────────────────────" },
+    {
+      "type": "select",
+      "id": "image_side",
+      "label": "Image Side (Desktop)",
+      "options": [
+        { "value": "left",  "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max Width (px)",
+      "min": 900, "max": 1400, "step": 20,
+      "default": 1100
+    },
+    {
+      "type": "range",
+      "id": "image_col_width",
+      "label": "Image Column Width (%)",
+      "min": 30, "max": 55, "step": 5,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid Gap (px)",
+      "min": 20, "max": 80, "step": 4,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "info_gap",
+      "label": "Info Content Gap (px)",
+      "min": 10, "max": 40, "step": 2,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (px)",
+      "min": 0, "max": 160, "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_h",
+      "label": "Padding Horizontal (px)",
+      "min": 16, "max": 80, "step": 4,
+      "default": 40
+    },
+
+    { "type": "header", "content": "─── Typography ───────────────────" },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading — Desktop (px)",
+      "min": 28, "max": 72, "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading — Mobile (px)",
+      "min": 24, "max": 48, "step": 2,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "desc_size",
+      "label": "Description Font Size (px)",
+      "min": 14, "max": 20, "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "feat_size",
+      "label": "Feature Font Size (px)",
+      "min": 14, "max": 20, "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price Font Size (px)",
+      "min": 24, "max": 56, "step": 2,
+      "default": 36
+    }
+
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shield",  "label": "Shield Check" },
+            { "value": "leaf",    "label": "Leaf" },
+            { "value": "flask",   "label": "Flask / Chemistry" },
+            { "value": "droplet", "label": "Droplet" },
+            { "value": "check",   "label": "Circle Check" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Feature Text",
+          "default": "Broad-spectrum pest defence"
+        }
+      ]
+    },
+    {
+      "type": "size_variant",
+      "name": "Size Variant",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Size Label",
+          "default": "1L"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "€39.99"
+        },
+        {
+          "type": "text",
+          "id": "popular_tag",
+          "label": "Tag (e.g. POPULAR)",
+          "info": "Leave blank to hide"
+        },
+        {
+          "type": "checkbox",
+          "id": "selected",
+          "label": "Selected by Default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Showcase",
+      "category": "Product",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "shield", "text": "Broad-spectrum pest defence" } },
+        { "type": "feature", "settings": { "icon": "leaf", "text": "Safe for edible crops" } },
+        { "type": "feature", "settings": { "icon": "flask", "text": "Concentrated — dilutes 1:50" } },
+        { "type": "size_variant", "settings": { "label": "250ml", "price": "€14.99" } },
+        { "type": "size_variant", "settings": { "label": "500ml", "price": "€24.99" } },
+        { "type": "size_variant", "settings": { "label": "1L", "price": "€39.99", "popular_tag": "POPULAR", "selected": true } },
+        { "type": "size_variant", "settings": { "label": "5L", "price": "€149.99" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
